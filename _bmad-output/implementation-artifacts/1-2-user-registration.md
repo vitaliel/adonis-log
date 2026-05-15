@@ -1,6 +1,6 @@
 # Story 1.2: User Registration
 
-Status: review
+Status: done
 
 ## Story
 
@@ -46,6 +46,12 @@ So that I can access write features of the platform.
 - [x] Verify TypeScript compiles clean (`tsc --noEmit`)
 - [x] Run ESLint (`npm run lint`)
 - [x] Test the full flow: visit `/register`, submit valid data, confirm redirect and session
+
+### Review Findings
+
+- [ ] [Review][Patch] Password hash algorithm conflicts with AC bcrypt requirement [config/hash.ts:13]
+- [ ] [Review][Patch] Registration email validator missing DB-safe max length bound [app/validators/auth/register_validator.ts:9]
+- [ ] [Review][Patch] Race on unique username/email can surface as 500 instead of inline validation error [app/controllers/auth_controller.ts:12]
 
 ## Dev Notes
 
