@@ -7,24 +7,24 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'auth.register.show': { paramsTuple?: []; params?: {} }
     'auth.register': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'session.store': { paramsTuple?: []; params?: {} }
-    'session.destroy': { paramsTuple?: []; params?: {} }
+    'auth.login.show': { paramsTuple?: []; params?: {} }
+    'auth.login': { paramsTuple?: []; params?: {} }
+    'auth.logout': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
     'auth.register.show': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
+    'auth.login.show': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
     'auth.register.show': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
+    'auth.login.show': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'auth.register': { paramsTuple?: []; params?: {} }
-    'session.store': { paramsTuple?: []; params?: {} }
-    'session.destroy': { paramsTuple?: []; params?: {} }
+    'auth.login': { paramsTuple?: []; params?: {} }
+    'auth.logout': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {
