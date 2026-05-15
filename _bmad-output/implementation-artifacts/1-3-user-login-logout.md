@@ -1,6 +1,6 @@
 # Story 1.3: User Login & Logout
 
-Status: review
+Status: done
 
 ## Story
 
@@ -50,6 +50,10 @@ So that I can securely access my account and protect it when I leave.
 - [x] Verify TypeScript compiles clean (`npm run typecheck`)
 - [x] Run ESLint (`npm run lint`)
 - [x] Test the full flow manually: login with valid credentials, login with invalid credentials, logout
+
+### Review Findings
+
+- [x] [Review][Patch] Avoid `redirect().back()` on invalid credentials; redirect to login route explicitly to prevent referer-based misdirection and ensure deterministic error-display flow [app/controllers/auth_controller.ts:34]
 
 ## Dev Notes
 

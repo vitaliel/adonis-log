@@ -31,7 +31,7 @@ export default class AuthController {
     } catch (error) {
       if (error instanceof authErrors.E_INVALID_CREDENTIALS) {
         session.flash('errors', { email: 'Invalid email or password' })
-        return response.redirect().back()
+        return response.redirect().toRoute('auth.login.show')
       }
       throw error
     }
