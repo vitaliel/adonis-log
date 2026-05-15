@@ -50,7 +50,7 @@ development_status:
 
   epic-2: in-progress
   2-1-post-list-post-detail-public-read: done
-  2-2-create-publish-a-post: ready-for-dev
+  2-2-create-publish-a-post: review
   2-3-edit-delete-own-post: backlog
   epic-2-retrospective: optional
 

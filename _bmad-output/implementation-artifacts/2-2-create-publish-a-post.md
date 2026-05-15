@@ -1,6 +1,6 @@
 # Story 2.2: Create & Publish a Post
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -24,29 +24,29 @@ so that I can share content with the community.
 
 ## Tasks / Subtasks
 
-- [ ] Add `create` and `store` methods to `app/controllers/posts_controller.ts` (AC: #1, #2, #3, #4, #5)
-  - [ ] `create({ inertia }: HttpContext)` — return `inertia.render('posts/PostCreate' as never, {} as any)`
-  - [ ] `store({ request, response, auth }: HttpContext)` — validate with `createPostValidator`, create `Post`, find-or-create tags (slugify), attach via `post.related('tags').attach(tagIds)`, redirect to `/posts/${post.id}`
+- [x] Add `create` and `store` methods to `app/controllers/posts_controller.ts` (AC: #1, #2, #3, #4, #5)
+  - [x] `create({ inertia }: HttpContext)` — return `inertia.render('posts/PostCreate' as never, {} as any)`
+  - [x] `store({ request, response, auth }: HttpContext)` — validate with `createPostValidator`, create `Post`, find-or-create tags (slugify), attach via `post.related('tags').attach(tagIds)`, redirect to `/posts/${post.id}`
 
-- [ ] Create `app/validators/posts/create_post_validator.ts` (AC: #3)
-  - [ ] `title: vine.string().trim().minLength(1).maxLength(255)`
-  - [ ] `body: vine.string().trim().minLength(1)`
-  - [ ] `tags: vine.array(vine.string().trim().minLength(1)).optional()`
-  - [ ] Export as `export const createPostValidator = vine.compile(vine.object({...}))`
+- [x] Create `app/validators/posts/create_post_validator.ts` (AC: #3)
+  - [x] `title: vine.string().trim().minLength(1).maxLength(255)`
+  - [x] `body: vine.string().trim().minLength(1)`
+  - [x] `tags: vine.array(vine.string().trim().minLength(1)).optional()`
+  - [x] Export as `export const createPostValidator = vine.compile(vine.object({...}))`
 
-- [ ] Create `inertia/pages/posts/PostCreate.tsx` (AC: #1, #2, #3)
-  - [ ] Import `useForm` from `@inertiajs/react`; import `PageProps` from `~/types`
-  - [ ] Form state: `useForm({ title: '', body: '', tags: '' })` (tags as comma-separated string in UI, split before submit)
-  - [ ] Submit handler: split `tags` string on commas, trim each, filter empty, `form.post('/posts', { data: { title, body, tags: tagList } })`
-  - [ ] Display `form.errors.title`, `form.errors.body` inline below each field
-  - [ ] Bootstrap form layout: `form-group`, `form-control`, `is-invalid` + `invalid-feedback` for errors
-  - [ ] Submit button disabled while `form.processing`
+- [x] Create `inertia/pages/posts/PostCreate.tsx` (AC: #1, #2, #3)
+  - [x] Import `useForm` from `@inertiajs/react`; import `PageProps` from `~/types`
+  - [x] Form state: `useForm({ title: '', body: '', tags: '' })` (tags as comma-separated string in UI, split before submit)
+  - [x] Submit handler: split `tags` string on commas, trim each, filter empty, `form.transform(...).post('/posts')`
+  - [x] Display `form.errors.title`, `form.errors.body` inline below each field
+  - [x] Bootstrap form layout: `form-group`, `form-control`, `is-invalid` + `invalid-feedback` for errors
+  - [x] Submit button disabled while `form.processing`
 
-- [ ] Update `start/routes.ts` (AC: #1, #2, #4)
-  - [ ] Add `GET /posts/create` → `[PostsController, 'create']` with `middleware.auth()`, named `posts.create` — **MUST be defined BEFORE `GET /posts/:id`** to avoid `:id` matching "create"
-  - [ ] Add `POST /posts` → `[PostsController, 'store']` with `middleware.auth()`, named `posts.store`
+- [x] Update `start/routes.ts` (AC: #1, #2, #4)
+  - [x] Add `GET /posts/create` → `[PostsController, 'create']` with `middleware.auth()`, named `posts.create` — **MUST be defined BEFORE `GET /posts/:id`** to avoid `:id` matching "create"
+  - [x] Add `POST /posts` → `[PostsController, 'store']` with `middleware.auth()`, named `posts.store`
 
-- [ ] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+- [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
 
 ## Dev Notes
 
@@ -289,6 +289,23 @@ Claude Sonnet 4.6
 
 ### Debug Log References
 
+- `form.post('/posts', { data: ... })` is not valid in `@inertiajs/react` — `UseFormSubmitOptions` does not include a `data` property. Used `form.transform(...)` then `form.post('/posts')` instead (transform returns void, cannot chain).
+
 ### Completion Notes List
 
+- Added `create` and `store` methods to `PostsController`; added `Tag` and `createPostValidator` imports
+- Created `app/validators/posts/create_post_validator.ts` with VineJS schema (title, body, tags optional)
+- Created `inertia/pages/posts/PostCreate.tsx` with Bootstrap form, inline validation errors, tags comma-split via `form.transform()`
+- Updated `start/routes.ts`: `GET /posts/create` placed before `GET /posts/:id` to prevent route collision; `POST /posts` added; both protected with `middleware.auth()`
+- All 11 existing tests pass; typecheck clean; lint clean
+
 ### File List
+
+- `app/validators/posts/create_post_validator.ts` (new)
+- `inertia/pages/posts/PostCreate.tsx` (new)
+- `app/controllers/posts_controller.ts` (modified)
+- `start/routes.ts` (modified)
+
+## Change Log
+
+- 2026-05-15: Implemented Story 2.2 — Create & Publish a Post. Added create/store controller methods, VineJS validator, PostCreate React page with Bootstrap form and inline errors, updated routes with correct ordering.

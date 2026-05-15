@@ -1,7 +1,34 @@
 import Post from '#models/post'
+import Tag from '#models/tag'
+import { createPostValidator } from '#validators/posts/create_post_validator'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class PostsController {
+  async create({ inertia }: HttpContext) {
+    return inertia.render('posts/PostCreate' as never, {} as any)
+  }
+
+  async store({ request, response, auth }: HttpContext) {
+    const { title, body, tags } = await request.validateUsing(createPostValidator)
+
+    const post = await Post.create({ userId: auth.user!.id, title, body })
+
+    if (tags && tags.length > 0) {
+      const tagModels = await Promise.all(
+        tags.map(async (tagName) => {
+          const slug = tagName
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+          return Tag.firstOrCreate({ slug }, { name: tagName, slug })
+        })
+      )
+      await post.related('tags').attach(tagModels.map((t) => t.id))
+    }
+
+    return response.redirect(`/posts/${post.id}`)
+  }
+
   async index({ request, inertia }: HttpContext) {
     const page = Math.max(1, Number.parseInt(String(request.input('page', 1)), 10) || 1)
     const posts = await Post.query()

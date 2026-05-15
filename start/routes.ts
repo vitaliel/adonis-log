@@ -33,6 +33,10 @@ router
 
 router.get('/posts', [PostsController, 'index']).as('posts.index')
 
+router.get('/posts/create', [PostsController, 'create']).as('posts.create').use(middleware.auth())
+
 router.get('/posts/:id', [PostsController, 'show']).as('posts.show')
+
+router.post('/posts', [PostsController, 'store']).as('posts.store').use(middleware.auth())
 
 router.get('/tags/:slug', [TagsController, 'show']).as('tags.show')
