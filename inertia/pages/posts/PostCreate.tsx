@@ -12,13 +12,12 @@ export default function PostCreate(_props: PostCreateProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const uniqueTags = [...new Set(dataToTags(form.data.tags))]
+
     form.transform((data) => ({
       title: data.title,
       body: data.body,
-      tags: data.tags
-        .split(',')
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0),
+      tags: uniqueTags,
     }))
     form.post('/posts')
   }
@@ -77,4 +76,11 @@ export default function PostCreate(_props: PostCreateProps) {
       </div>
     </div>
   )
+}
+
+function dataToTags(tagsInput: string): string[] {
+  return tagsInput
+    .split(',')
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0)
 }

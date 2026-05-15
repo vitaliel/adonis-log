@@ -1,6 +1,6 @@
 # Story 2.2: Create & Publish a Post
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -47,6 +47,12 @@ so that I can share content with the community.
   - [x] Add `POST /posts` → `[PostsController, 'store']` with `middleware.auth()`, named `posts.store`
 
 - [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+
+### Review Findings
+
+- [x] [Review][Patch] Duplicate input tags can trigger duplicate pivot inserts and fail post publish [app/controllers/posts_controller.ts:16]
+- [x] [Review][Patch] Symbol-only tags can normalize to empty slug and cause invalid tag creation/failure [app/controllers/posts_controller.ts:19]
+- [x] [Review][Patch] Post creation and tag attachment are non-atomic, allowing partial writes on downstream failure [app/controllers/posts_controller.ts:13]
 
 ## Dev Notes
 
