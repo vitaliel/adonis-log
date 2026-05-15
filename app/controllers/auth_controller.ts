@@ -13,8 +13,7 @@ export default class AuthController {
     const payload = await request.validateUsing(registerValidator)
     const user = await User.create(payload)
     await auth.use('web').login(user)
-    // TODO story 2.1: change to response.redirect('/posts') once posts route exists
-    return response.redirect('/')
+    return response.redirect('/posts')
   }
 
   async showLogin({ inertia }: HttpContext) {
@@ -26,8 +25,7 @@ export default class AuthController {
     try {
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
-      // TODO story 2.1: change to response.redirect('/posts') once posts route exists
-      return response.redirect('/')
+      return response.redirect('/posts')
     } catch (error) {
       if (error instanceof authErrors.E_INVALID_CREDENTIALS) {
         session.flash('errors', { email: 'Invalid email or password' })
@@ -39,7 +37,6 @@ export default class AuthController {
 
   async logout({ auth, response }: HttpContext) {
     await auth.use('web').logout()
-    // TODO story 2.1: change to response.redirect('/posts') once posts route exists
-    return response.redirect('/')
+    return response.redirect('/posts')
   }
 }
