@@ -17,6 +17,7 @@ export default class extends BaseSchema {
       table.text('body').notNullable()
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').notNullable()
+      table.index(['created_at'])
     })
   }
 

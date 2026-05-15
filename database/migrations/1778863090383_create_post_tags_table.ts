@@ -20,6 +20,7 @@ export default class extends BaseSchema {
         .inTable('tags')
         .onDelete('CASCADE')
       table.unique(['post_id', 'tag_id'])
+      table.index(['tag_id'])
     })
   }
 

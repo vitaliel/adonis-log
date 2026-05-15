@@ -4,7 +4,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class TagsController {
   async show({ params, request, inertia }: HttpContext) {
     const tag = await Tag.findByOrFail('slug', params.slug)
-    const page = Number(request.input('page', 1)) || 1
+    const page = Math.max(1, Number.parseInt(String(request.input('page', 1)), 10) || 1)
 
     const posts = await tag
       .related('posts')

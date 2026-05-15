@@ -1,6 +1,6 @@
 # Story 2.1: Post List & Post Detail (Public Read)
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -641,3 +641,11 @@ GPT-5.3-Codex
 ## Change Log
 
 - 2026-05-15: Implemented Story 2.1 end-to-end, added schema/models/controllers/routes/UI/types/tests, and moved status to `review`.
+
+### Review Findings
+
+- [x] [Review][Patch] Validate and clamp pagination `page` input to positive integers in both controllers [app/controllers/posts_controller.ts:6]
+- [x] [Review][Patch] Add an index on `posts.created_at` to support reverse-chronological pagination queries [database/migrations/1778863088284_create_posts_table.ts:18]
+- [x] [Review][Patch] Add an index on `post_tags.tag_id` for efficient tag-scoped post lookups [database/migrations/1778863090383_create_post_tags_table.ts:16]
+- [x] [Review][Patch] Remove duplicate route-level `silentAuth` middleware where router-level middleware already applies it [start/routes.ts:34]
+- [x] [Review][Patch] Render non-clickable pagination controls when page URLs are null instead of linking to `#` [inertia/components/Pagination.tsx:17]

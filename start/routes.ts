@@ -31,8 +31,8 @@ router
   })
   .use(middleware.auth())
 
-router.get('/posts', [PostsController, 'index']).as('posts.index').use(middleware.silentAuth())
+router.get('/posts', [PostsController, 'index']).as('posts.index')
 
-router.get('/posts/:id', [PostsController, 'show']).as('posts.show').use(middleware.silentAuth())
+router.get('/posts/:id', [PostsController, 'show']).as('posts.show')
 
-router.get('/tags/:slug', [TagsController, 'show']).as('tags.show').use(middleware.silentAuth())
+router.get('/tags/:slug', [TagsController, 'show']).as('tags.show')
