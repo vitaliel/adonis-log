@@ -31,7 +31,9 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
         error,
         success,
       }),
-      user: ctx.inertia.always(auth?.user ? UserTransformer.transform(auth.user) : undefined),
+      auth: ctx.inertia.always({
+        user: auth?.user ? (UserTransformer.transform(auth.user) as any) : null,
+      }),
     }
   }
 

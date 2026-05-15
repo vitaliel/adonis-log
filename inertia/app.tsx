@@ -1,8 +1,7 @@
 import './css/app.css'
 import { ReactElement } from 'react'
 import { client } from './client'
-import Layout from '~/layouts/default'
-import { Data } from '@generated/data'
+import MainLayout from '~/layouts/MainLayout'
 import { createRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import { TuyauProvider } from '@adonisjs/inertia/react'
@@ -16,7 +15,7 @@ createInertiaApp({
     return resolvePageComponent(
       `./pages/${name}.tsx`,
       import.meta.glob('./pages/**/*.tsx'),
-      (page: ReactElement<Data.SharedProps>) => <Layout children={page} />
+      (page: ReactElement) => <MainLayout>{page}</MainLayout>
     )
   },
   setup({ el, App, props }) {
