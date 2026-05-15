@@ -24,23 +24,23 @@ const routes = {
     tokens: [{"old":"/register","type":0,"val":"register","end":""}],
     types: placeholder as Registry['auth.register']['types'],
   },
-  'session.create': {
+  'auth.login.show': {
     methods: ["GET","HEAD"],
     pattern: '/login',
     tokens: [{"old":"/login","type":0,"val":"login","end":""}],
-    types: placeholder as Registry['session.create']['types'],
+    types: placeholder as Registry['auth.login.show']['types'],
   },
-  'session.store': {
+  'auth.login': {
     methods: ["POST"],
     pattern: '/login',
     tokens: [{"old":"/login","type":0,"val":"login","end":""}],
-    types: placeholder as Registry['session.store']['types'],
+    types: placeholder as Registry['auth.login']['types'],
   },
-  'session.destroy': {
+  'auth.logout': {
     methods: ["POST"],
     pattern: '/logout',
     tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
-    types: placeholder as Registry['session.destroy']['types'],
+    types: placeholder as Registry['auth.logout']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

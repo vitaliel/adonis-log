@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: "2026-05-15"
-last_updated: "2026-05-15T18:07:52+03:00"
+last_updated: "2026-05-15T18:27:16+03:00"
 project: AdonisLog
 project_key: NOKEY
 tracking_system: file-system
@@ -45,7 +45,7 @@ development_status:
   epic-1: in-progress
   1-1-project-foundation-database-bootstrap-inertia-layout: done
   1-2-user-registration: done
-  1-3-user-login-logout: ready-for-dev
+  1-3-user-login-logout: review
   epic-1-retrospective: optional
 
   epic-2: backlog

@@ -7,10 +7,9 @@ export interface ApiDefinition {
     register: typeof routes['auth.register'] & {
       show: typeof routes['auth.register.show']
     }
-  }
-  session: {
-    create: typeof routes['session.create']
-    store: typeof routes['session.store']
-    destroy: typeof routes['session.destroy']
+    login: typeof routes['auth.login'] & {
+      show: typeof routes['auth.login.show']
+    }
+    logout: typeof routes['auth.logout']
   }
 }

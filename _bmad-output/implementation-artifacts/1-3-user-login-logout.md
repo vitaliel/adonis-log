@@ -1,6 +1,6 @@
 # Story 1.3: User Login & Logout
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -24,32 +24,32 @@ So that I can securely access my account and protect it when I leave.
 
 ## Tasks / Subtasks
 
-- [ ] Create `app/validators/auth/login_validator.ts` (AC: #1, #3)
-  - [ ] VineJS schema: `email` (string, email, normalizeEmail), `password` (string, minLength(1))
-  - [ ] Use `vine.compile(vine.object({...}))` pattern (NOT `vine.create`)
-- [ ] Add `showLogin`, `login`, `logout` to `app/controllers/auth_controller.ts` (AC: #1, #2, #3, #4)
-  - [ ] `showLogin({ inertia })` — renders `auth/Login` page
-  - [ ] `login({ request, response, auth, session })` — validates via `loginValidator`, calls `User.verifyCredentials()`, logs in, redirects to `/`
-  - [ ] Catch `E_INVALID_CREDENTIALS` in `login()` — flash `errors.email` + redirect back
-  - [ ] `logout({ auth, response })` — calls `auth.use('web').logout()`, redirects to `/`
-- [ ] Create `inertia/pages/auth/Login.tsx` (AC: #1, #3)
-  - [ ] Bootstrap-styled form: email and password fields
-  - [ ] Use `useForm` from `@inertiajs/react` (NOT `<Form>` from `@adonisjs/inertia/react`)
-  - [ ] Inline Bootstrap error display: `is-invalid` class + `invalid-feedback` div per field
-  - [ ] Submit via `post('/login')`
-  - [ ] Link to `/register` at bottom
-- [ ] Update `start/routes.ts` (AC: #1, #2, #4, #5)
-  - [ ] Replace `controllers.Session` login routes with `[AuthController, 'showLogin']` and `[AuthController, 'login']`
-  - [ ] Replace `controllers.Session` logout route with `[AuthController, 'logout']` (keep in `middleware.auth()` group)
-  - [ ] Name routes: `auth.login.show`, `auth.login`, `auth.logout`
-  - [ ] Remove any reference to `controllers.Session` and the `session_controller` import
-- [ ] Delete scaffold artifacts
-  - [ ] Delete `app/controllers/session_controller.ts`
-  - [ ] Delete `inertia/pages/auth/login.tsx` (lowercase scaffold file)
-- [ ] Run `node ace tuyau:generate` (or verify it auto-runs) to regenerate `#generated/controllers`
-- [ ] Verify TypeScript compiles clean (`npm run typecheck`)
-- [ ] Run ESLint (`npm run lint`)
-- [ ] Test the full flow manually: login with valid credentials, login with invalid credentials, logout
+- [x] Create `app/validators/auth/login_validator.ts` (AC: #1, #3)
+  - [x] VineJS schema: `email` (string, email, normalizeEmail), `password` (string, minLength(1))
+  - [x] Use `vine.compile(vine.object({...}))` pattern (NOT `vine.create`)
+- [x] Add `showLogin`, `login`, `logout` to `app/controllers/auth_controller.ts` (AC: #1, #2, #3, #4)
+  - [x] `showLogin({ inertia })` — renders `auth/Login` page
+  - [x] `login({ request, response, auth, session })` — validates via `loginValidator`, calls `User.verifyCredentials()`, logs in, redirects to `/`
+  - [x] Catch `E_INVALID_CREDENTIALS` in `login()` — flash `errors.email` + redirect back
+  - [x] `logout({ auth, response })` — calls `auth.use('web').logout()`, redirects to `/`
+- [x] Create `inertia/pages/auth/Login.tsx` (AC: #1, #3)
+  - [x] Bootstrap-styled form: email and password fields
+  - [x] Use `useForm` from `@inertiajs/react` (NOT `<Form>` from `@adonisjs/inertia/react`)
+  - [x] Inline Bootstrap error display: `is-invalid` class + `invalid-feedback` div per field
+  - [x] Submit via `post('/login')`
+  - [x] Link to `/register` at bottom
+- [x] Update `start/routes.ts` (AC: #1, #2, #4, #5)
+  - [x] Replace `controllers.Session` login routes with `[AuthController, 'showLogin']` and `[AuthController, 'login']`
+  - [x] Replace `controllers.Session` logout route with `[AuthController, 'logout']` (keep in `middleware.auth()` group)
+  - [x] Name routes: `auth.login.show`, `auth.login`, `auth.logout`
+  - [x] Remove any reference to `controllers.Session` and the `session_controller` import
+- [x] Delete scaffold artifacts
+  - [x] Delete `app/controllers/session_controller.ts`
+  - [x] Delete `inertia/pages/auth/login.tsx` (lowercase scaffold file)
+- [x] Run `node ace tuyau:generate` (or verify it auto-runs) to regenerate `#generated/controllers`
+- [x] Verify TypeScript compiles clean (`npm run typecheck`)
+- [x] Run ESLint (`npm run lint`)
+- [x] Test the full flow manually: login with valid credentials, login with invalid credentials, logout
 
 ## Dev Notes
 
@@ -317,6 +317,26 @@ Claude Sonnet 4.6 (claude-sonnet-4.6)
 
 ### Debug Log References
 
+- `tuyau:generate` command not available via `node ace`; per Dev Notes, it runs automatically via `generateRegistry` hook on serve/restart. Verified `.adonisjs/server/controllers.ts` already had `Session` entry absent — registry was already clean after scaffold deletion.
+
 ### Completion Notes List
 
+- Created `app/validators/auth/login_validator.ts` with VineJS compile pattern; normalizeEmail() ensures lowercase match with stored registration email.
+- Added `showLogin`, `login`, `logout` to `AuthController`; `login` catches `E_INVALID_CREDENTIALS` and flashes `errors.email` for Inertia inline error display.
+- Created `inertia/pages/auth/Login.tsx` (PascalCase) using `useForm` from `@inertiajs/react` with Bootstrap `is-invalid` / `invalid-feedback` pattern.
+- Updated `start/routes.ts`: removed `controllers` import and all `controllers.Session` references; all login/logout routes now use `[AuthController, ...]` with proper names.
+- Deleted scaffold artifacts: `session_controller.ts` and `inertia/pages/auth/login.tsx`.
+- TypeScript typecheck: ✅ clean. ESLint: ✅ clean. All 9 existing tests: ✅ pass.
+
 ### File List
+
+- `app/validators/auth/login_validator.ts` — new (login VineJS validator)
+- `app/controllers/auth_controller.ts` — modified (added showLogin, login, logout)
+- `inertia/pages/auth/Login.tsx` — new (Bootstrap login form with useForm)
+- `start/routes.ts` — modified (replaced Session controller routes with AuthController)
+- `app/controllers/session_controller.ts` — deleted (scaffold artifact)
+- `inertia/pages/auth/login.tsx` — deleted (scaffold artifact, lowercase)
+
+## Change Log
+
+- 2026-05-15: Implemented user login/logout (Story 1.3). Created login validator and Login.tsx page; added showLogin/login/logout to AuthController; updated routes to use AuthController; deleted session_controller.ts and lowercase login.tsx scaffold artifacts.
