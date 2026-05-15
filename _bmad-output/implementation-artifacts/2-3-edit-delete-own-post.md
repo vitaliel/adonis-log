@@ -1,6 +1,6 @@
 # Story 2.3: Edit & Delete Own Post
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -66,6 +66,11 @@ so that I can keep my content up to date or remove it.
   - [x] Delete: use Inertia `router.delete('/posts/:id', { onSuccess: ... })` or a `<form>` with `useForm` + `form.delete()`; display a confirm dialog before submitting
 
 - [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+
+### Review Findings
+
+- [x] [Review][Patch] Non-atomic post update can leave inconsistent post/tag state [app/controllers/posts_controller.ts:124]
+- [x] [Review][Patch] Concurrent tag creation can fail edit with a 500 due to slug race [app/controllers/posts_controller.ts:140]
 
 ## Dev Notes
 

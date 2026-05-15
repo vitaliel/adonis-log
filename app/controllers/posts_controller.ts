@@ -120,11 +120,6 @@ export default class PostsController {
     await bouncer.with(PostPolicy).authorize('edit', post)
 
     const { title, body, tags } = await request.validateUsing(updatePostValidator)
-
-    post.title = title
-    post.body = body
-    await post.save()
-
     const uniqueTagNamesBySlug = new Map<string, string>()
     for (const tagName of tags ?? []) {
       const slug = tagName
@@ -136,16 +131,31 @@ export default class PostsController {
       }
     }
 
-    if (uniqueTagNamesBySlug.size > 0) {
-      const tagModels = await Promise.all(
-        Array.from(uniqueTagNamesBySlug.entries()).map(([slug, name]) =>
-          Tag.firstOrCreate({ slug }, { name, slug })
-        )
-      )
-      await post.related('tags').sync(tagModels.map((t) => t.id))
-    } else {
-      await post.related('tags').sync([])
-    }
+    await db.transaction(async (trx) => {
+      post.useTransaction(trx)
+      post.title = title
+      post.body = body
+      await post.save()
+
+      if (uniqueTagNamesBySlug.size > 0) {
+        const tagEntries = Array.from(uniqueTagNamesBySlug.entries()).map(([slug, name]) => ({
+          slug,
+          name,
+        }))
+        await trx.table('tags').insert(tagEntries).onConflict('slug').ignore()
+
+        const tagsToSync = await Tag.query({ client: trx })
+          .whereIn(
+            'slug',
+            tagEntries.map((entry) => entry.slug)
+          )
+          .select('id')
+
+        await post.related('tags').sync(tagsToSync.map((tag) => tag.id))
+      } else {
+        await post.related('tags').sync([])
+      }
+    })
 
     session.flash('success', 'Post updated successfully.')
     return response.redirect().toRoute('posts.show', { id: post.id })
