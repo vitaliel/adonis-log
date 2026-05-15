@@ -1,6 +1,8 @@
 import Post from '#models/post'
+import PostPolicy from '#policies/post_policy'
 import Tag from '#models/tag'
 import { createPostValidator } from '#validators/posts/create_post_validator'
+import { updatePostValidator } from '#validators/posts/update_post_validator'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 
@@ -69,12 +71,14 @@ export default class PostsController {
     )
   }
 
-  async show({ params, inertia }: HttpContext) {
+  async show({ params, inertia, bouncer, auth }: HttpContext) {
     const post = await Post.query()
       .where('id', params.id)
       .preload('author')
       .preload('tags')
       .firstOrFail()
+
+    const canEdit = auth.user ? await bouncer.with(PostPolicy).allows('edit', post) : false
 
     return inertia.render(
       'posts/PostShow' as never,
@@ -88,9 +92,70 @@ export default class PostsController {
           tags: post.tags.map((tag) => ({ name: tag.name, slug: tag.slug })),
           like_count: 0,
         },
+        can_edit: canEdit,
         like_count: 0,
         comments: [],
       } as any
     )
+  }
+
+  async edit({ params, inertia, bouncer }: HttpContext) {
+    const post = await Post.query().where('id', params.id).preload('tags').firstOrFail()
+    await bouncer.with(PostPolicy).authorize('edit', post)
+    return inertia.render(
+      'posts/PostEdit' as never,
+      {
+        post: {
+          id: post.id,
+          title: post.title,
+          body: post.body,
+          tags: post.tags.map((t) => t.name).join(', '),
+        },
+      } as any
+    )
+  }
+
+  async update({ params, request, response, session, bouncer }: HttpContext) {
+    const post = await Post.findOrFail(params.id)
+    await bouncer.with(PostPolicy).authorize('edit', post)
+
+    const { title, body, tags } = await request.validateUsing(updatePostValidator)
+
+    post.title = title
+    post.body = body
+    await post.save()
+
+    const uniqueTagNamesBySlug = new Map<string, string>()
+    for (const tagName of tags ?? []) {
+      const slug = tagName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+      if (slug.length > 0 && !uniqueTagNamesBySlug.has(slug)) {
+        uniqueTagNamesBySlug.set(slug, tagName)
+      }
+    }
+
+    if (uniqueTagNamesBySlug.size > 0) {
+      const tagModels = await Promise.all(
+        Array.from(uniqueTagNamesBySlug.entries()).map(([slug, name]) =>
+          Tag.firstOrCreate({ slug }, { name, slug })
+        )
+      )
+      await post.related('tags').sync(tagModels.map((t) => t.id))
+    } else {
+      await post.related('tags').sync([])
+    }
+
+    session.flash('success', 'Post updated successfully.')
+    return response.redirect().toRoute('posts.show', { id: post.id })
+  }
+
+  async destroy({ params, response, session, bouncer }: HttpContext) {
+    const post = await Post.findOrFail(params.id)
+    await bouncer.with(PostPolicy).authorize('delete', post)
+    await post.delete()
+    session.flash('success', 'Post deleted successfully.')
+    return response.redirect().toRoute('posts.index')
   }
 }

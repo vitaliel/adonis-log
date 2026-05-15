@@ -12,4 +12,16 @@ export interface ApiDefinition {
     }
     logout: typeof routes['auth.logout']
   }
+  posts: {
+    index: typeof routes['posts.index']
+    create: typeof routes['posts.create']
+    edit: typeof routes['posts.edit']
+    show: typeof routes['posts.show']
+    store: typeof routes['posts.store']
+    update: typeof routes['posts.update']
+    destroy: typeof routes['posts.destroy']
+  }
+  tags: {
+    show: typeof routes['tags.show']
+  }
 }

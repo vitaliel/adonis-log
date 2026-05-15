@@ -35,8 +35,14 @@ router.get('/posts', [PostsController, 'index']).as('posts.index')
 
 router.get('/posts/create', [PostsController, 'create']).as('posts.create').use(middleware.auth())
 
+router.get('/posts/:id/edit', [PostsController, 'edit']).as('posts.edit').use(middleware.auth())
+
 router.get('/posts/:id', [PostsController, 'show']).as('posts.show')
 
 router.post('/posts', [PostsController, 'store']).as('posts.store').use(middleware.auth())
+
+router.put('/posts/:id', [PostsController, 'update']).as('posts.update').use(middleware.auth())
+
+router.delete('/posts/:id', [PostsController, 'destroy']).as('posts.destroy').use(middleware.auth())
 
 router.get('/tags/:slug', [TagsController, 'show']).as('tags.show')

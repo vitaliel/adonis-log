@@ -1,6 +1,6 @@
 # Story 2.3: Edit & Delete Own Post
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -26,46 +26,46 @@ so that I can keep my content up to date or remove it.
 
 ## Tasks / Subtasks
 
-- [ ] Install and configure `@adonisjs/bouncer` (AC: #5)
-  - [ ] `npm install @adonisjs/bouncer` then `node ace configure @adonisjs/bouncer`
-  - [ ] Verify `app/middleware/` gets `initialize_bouncer_middleware.ts` and `adonisrc.ts` references it
+- [x] Install and configure `@adonisjs/bouncer` (AC: #5)
+  - [x] `npm install @adonisjs/bouncer` then `node ace configure @adonisjs/bouncer`
+  - [x] Verify `app/middleware/` gets `initialize_bouncer_middleware.ts` and `adonisrc.ts` references it
 
-- [ ] Create `app/policies/post_policy.ts` with `PostPolicy` (AC: #5)
-  - [ ] `node ace make:policy post --model=Post` (or create manually)
-  - [ ] Implement `edit(user: User, post: Post): boolean` → `post.userId === user.id`
-  - [ ] Implement `delete(user: User, post: Post): boolean` → `post.userId === user.id`
+- [x] Create `app/policies/post_policy.ts` with `PostPolicy` (AC: #5)
+  - [x] `node ace make:policy post --model=Post` (or create manually)
+  - [x] Implement `edit(user: User, post: Post): boolean` → `post.userId === user.id`
+  - [x] Implement `delete(user: User, post: Post): boolean` → `post.userId === user.id`
 
-- [ ] Create `app/validators/posts/update_post_validator.ts` (AC: #6)
-  - [ ] Same schema as `create_post_validator`: `title`, `body`, `tags` — reuse same VineJS rules
-  - [ ] Export as `export const updatePostValidator = vine.compile(vine.object({...}))`
+- [x] Create `app/validators/posts/update_post_validator.ts` (AC: #6)
+  - [x] Same schema as `create_post_validator`: `title`, `body`, `tags` — reuse same VineJS rules
+  - [x] Export as `export const updatePostValidator = vine.compile(vine.object({...}))`
 
-- [ ] Add `edit`, `update`, `destroy` methods to `app/controllers/posts_controller.ts` (AC: #2, #3, #4, #5, #6)
-  - [ ] `edit({ params, inertia, bouncer }: HttpContext)` — load post + tags, authorize `edit`, render `posts/PostEdit`
-  - [ ] `update({ params, request, response, auth, bouncer }: HttpContext)` — load post, authorize `edit`, validate, sync tags, redirect with flash
-  - [ ] `destroy({ params, response, bouncer }: HttpContext)` — load post, authorize `delete`, delete, redirect with flash
+- [x] Add `edit`, `update`, `destroy` methods to `app/controllers/posts_controller.ts` (AC: #2, #3, #4, #5, #6)
+  - [x] `edit({ params, inertia, bouncer }: HttpContext)` — load post + tags, authorize `edit`, render `posts/PostEdit`
+  - [x] `update({ params, request, response, auth, bouncer }: HttpContext)` — load post, authorize `edit`, validate, sync tags, redirect with flash
+  - [x] `destroy({ params, response, bouncer }: HttpContext)` — load post, authorize `delete`, delete, redirect with flash
 
-- [ ] Update `start/routes.ts` (AC: #1, #2, #3, #4)
-  - [ ] Add `GET /posts/:id/edit` → `[PostsController, 'edit']` with `middleware.auth()`, named `posts.edit` — **MUST be before `GET /posts/:id`**
-  - [ ] Add `PUT /posts/:id` → `[PostsController, 'update']` with `middleware.auth()`, named `posts.update`
-  - [ ] Add `DELETE /posts/:id` → `[PostsController, 'destroy']` with `middleware.auth()`, named `posts.destroy`
+- [x] Update `start/routes.ts` (AC: #1, #2, #3, #4)
+  - [x] Add `GET /posts/:id/edit` → `[PostsController, 'edit']` with `middleware.auth()`, named `posts.edit` — **MUST be before `GET /posts/:id`**
+  - [x] Add `PUT /posts/:id` → `[PostsController, 'update']` with `middleware.auth()`, named `posts.update`
+  - [x] Add `DELETE /posts/:id` → `[PostsController, 'destroy']` with `middleware.auth()`, named `posts.destroy`
 
-- [ ] Update `app/controllers/posts_controller.ts` `show` method to pass `can_edit` prop (AC: #1)
-  - [ ] Add `bouncer` to destructured `HttpContext`
-  - [ ] Compute `canEdit = auth?.user ? await bouncer.with(PostPolicy).allows('edit', post) : false`
-  - [ ] Pass `can_edit: canEdit` as Inertia prop
+- [x] Update `app/controllers/posts_controller.ts` `show` method to pass `can_edit` prop (AC: #1)
+  - [x] Add `bouncer` to destructured `HttpContext`
+  - [x] Compute `canEdit = auth?.user ? await bouncer.with(PostPolicy).allows('edit', post) : false`
+  - [x] Pass `can_edit: canEdit` as Inertia prop
 
-- [ ] Create `inertia/pages/posts/PostEdit.tsx` (AC: #2, #3, #6)
-  - [ ] Pre-populate `useForm` with existing `title`, `body`, and tags (joined as comma string for UI)
-  - [ ] On submit: split tags, `form.transform(...)`, then `form.put('/posts/:id')`
-  - [ ] Display inline Bootstrap errors for `title` and `body`
-  - [ ] Submit button disabled while `form.processing`
+- [x] Create `inertia/pages/posts/PostEdit.tsx` (AC: #2, #3, #6)
+  - [x] Pre-populate `useForm` with existing `title`, `body`, and tags (joined as comma string for UI)
+  - [x] On submit: split tags, `form.transform(...)`, then `form.put('/posts/:id')`
+  - [x] Display inline Bootstrap errors for `title` and `body`
+  - [x] Submit button disabled while `form.processing`
 
-- [ ] Update `inertia/pages/posts/PostShow.tsx` to show Edit/Delete buttons (AC: #1, #4)
-  - [ ] Accept `can_edit: boolean` prop
-  - [ ] Render Bootstrap-styled Edit link (`<Link href="/posts/:id/edit">`) and Delete button (form POST with `_method=DELETE`) only when `can_edit === true`
-  - [ ] Delete: use Inertia `router.delete('/posts/:id', { onSuccess: ... })` or a `<form>` with `useForm` + `form.delete()`; display a confirm dialog before submitting
+- [x] Update `inertia/pages/posts/PostShow.tsx` to show Edit/Delete buttons (AC: #1, #4)
+  - [x] Accept `can_edit: boolean` prop
+  - [x] Render Bootstrap-styled Edit link (`<Link href="/posts/:id/edit">`) and Delete button (form POST with `_method=DELETE`) only when `can_edit === true`
+  - [x] Delete: use Inertia `router.delete('/posts/:id', { onSuccess: ... })` or a `<form>` with `useForm` + `form.delete()`; display a confirm dialog before submitting
 
-- [ ] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+- [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
 
 ## Dev Notes
 
@@ -402,6 +402,38 @@ Claude Sonnet 4.6
 
 ### Debug Log References
 
+- `#generated/policies` module not found on first typecheck — resolved by running `node ace serve` briefly to trigger `indexPolicies()` code generation hook, which created `.adonisjs/server/policies.ts`.
+- `toRoute` type errors resolved automatically once routes.d.ts was regenerated with the new named routes.
+- PostShow `Link` import needed to use `@adonisjs/inertia/react` (not `@inertiajs/react`) per project lint rules.
+
 ### Completion Notes List
 
+- Installed and configured `@adonisjs/bouncer`; middleware auto-registered in router middleware stack after auth.
+- Created `PostPolicy` with `edit` and `delete` methods enforcing ownership (`post.userId === user.id`).
+- Created `updatePostValidator` matching `createPostValidator` schema.
+- Added `edit`, `update`, `destroy` controller methods; `update` uses `post.related('tags').sync()` for full tag replacement.
+- Updated `show` method to compute `canEdit` via `bouncer.with(PostPolicy).allows('edit', post)` (returns false for guests).
+- `GET /posts/:id/edit` placed before `GET /posts/:id` in routes to prevent route param conflict.
+- Created `PostEdit.tsx` with pre-populated form, inline validation errors, disabled submit on processing.
+- Updated `PostShow.tsx` with conditional Edit/Delete buttons (Edit uses `Link`, Delete uses `useForm.delete()` with confirm dialog).
+- All 17 tests pass (9 existing + 6 new policy/sync unit tests + 2 existing functional).
+
 ### File List
+
+- `app/policies/post_policy.ts` (new)
+- `app/validators/posts/update_post_validator.ts` (new)
+- `inertia/pages/posts/PostEdit.tsx` (new)
+- `app/controllers/posts_controller.ts` (modified)
+- `start/routes.ts` (modified)
+- `inertia/pages/posts/PostShow.tsx` (modified)
+- `adonisrc.ts` (modified — bouncer provider + indexPolicies hook added by configure)
+- `app/middleware/initialize_bouncer_middleware.ts` (new — auto-generated by bouncer configure)
+- `app/abilities/main.ts` (new — auto-generated by bouncer configure)
+- `start/kernel.ts` (modified — bouncer middleware registered by configure)
+- `package.json` (modified — @adonisjs/bouncer added)
+- `package-lock.json` (modified)
+- `tests/unit/post_policy.spec.ts` (new)
+
+## Change Log
+
+- 2026-05-15: Implemented Story 2.3 — Edit & Delete Own Post. Installed @adonisjs/bouncer, created PostPolicy with ownership checks, added edit/update/destroy controller actions with tag sync, added GET/PUT/DELETE routes, created PostEdit page, updated PostShow with conditional author-only Edit/Delete buttons.
