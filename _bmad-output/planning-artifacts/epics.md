@@ -189,6 +189,10 @@ So that I have a working, navigable application shell before any features are bu
 **When** the Inertia app loads in a browser
 **Then** Vite assets are loaded correctly and the `#app` div is present for React hydration
 
+**Given** the project root is set up
+**When** I inspect the repository
+**Then** an `.env.example` file exists documenting required environment variables (APP_KEY, DB_CONNECTION, etc.) with safe placeholder values, so that `cp .env.example .env` works as the first setup step
+
 ### Story 1.2: User Registration
 
 As an unregistered visitor,
@@ -265,7 +269,7 @@ So that I can discover and consume content on the platform.
 
 **Given** I click a post title
 **When** the post detail page loads at `/posts/:id`
-**Then** I see the full post content, all tags, like count, and a comments section — all loaded via Lucid eager loading (no N+1 queries)
+**Then** I see the full post content and all tags — loaded via Lucid eager loading (no N+1 queries). *(Note: the comments section and like count are added to this page in Epic 4 Stories 4.1 and 4.2. The `PostShow.tsx` component should accept optional `comments` and `like_count` props defaulting to empty/0 so Epic 4 can enrich it without structural changes.)*
 
 **Given** I visit `/tags/:slug`
 **When** the page loads
@@ -282,6 +286,10 @@ So that I can share content with the community.
 **Given** I am logged in and visit `/posts/create`
 **When** the page loads
 **Then** I see a form with title, body (textarea), and a tags input field
+
+**Given** the posts feature is being implemented
+**When** I run `node ace migration:run`
+**Then** migrations for `posts`, `tags`, and `post_tags` (pivot: post_id, tag_id) tables have been created and applied successfully
 
 **Given** I fill in a valid title, body, and optionally add tags (new or existing), and submit
 **When** the form is processed
