@@ -42,6 +42,54 @@ const routes = {
     tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['auth.logout']['types'],
   },
+  'posts.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/posts',
+    tokens: [{"old":"/posts","type":0,"val":"posts","end":""}],
+    types: placeholder as Registry['posts.index']['types'],
+  },
+  'posts.create': {
+    methods: ["GET","HEAD"],
+    pattern: '/posts/create',
+    tokens: [{"old":"/posts/create","type":0,"val":"posts","end":""},{"old":"/posts/create","type":0,"val":"create","end":""}],
+    types: placeholder as Registry['posts.create']['types'],
+  },
+  'posts.edit': {
+    methods: ["GET","HEAD"],
+    pattern: '/posts/:id/edit',
+    tokens: [{"old":"/posts/:id/edit","type":0,"val":"posts","end":""},{"old":"/posts/:id/edit","type":1,"val":"id","end":""},{"old":"/posts/:id/edit","type":0,"val":"edit","end":""}],
+    types: placeholder as Registry['posts.edit']['types'],
+  },
+  'posts.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/posts/:id',
+    tokens: [{"old":"/posts/:id","type":0,"val":"posts","end":""},{"old":"/posts/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['posts.show']['types'],
+  },
+  'posts.store': {
+    methods: ["POST"],
+    pattern: '/posts',
+    tokens: [{"old":"/posts","type":0,"val":"posts","end":""}],
+    types: placeholder as Registry['posts.store']['types'],
+  },
+  'posts.update': {
+    methods: ["PUT"],
+    pattern: '/posts/:id',
+    tokens: [{"old":"/posts/:id","type":0,"val":"posts","end":""},{"old":"/posts/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['posts.update']['types'],
+  },
+  'posts.destroy': {
+    methods: ["DELETE"],
+    pattern: '/posts/:id',
+    tokens: [{"old":"/posts/:id","type":0,"val":"posts","end":""},{"old":"/posts/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['posts.destroy']['types'],
+  },
+  'tags.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/tags/:slug',
+    tokens: [{"old":"/tags/:slug","type":0,"val":"tags","end":""},{"old":"/tags/:slug","type":1,"val":"slug","end":""}],
+    types: placeholder as Registry['tags.show']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

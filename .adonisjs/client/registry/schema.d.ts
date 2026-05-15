@@ -79,4 +79,100 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/auth_controller').default['logout']>>>
     }
   }
+  'posts.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/posts'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['index']>>>
+    }
+  }
+  'posts.create': {
+    methods: ["GET","HEAD"]
+    pattern: '/posts/create'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['create']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['create']>>>
+    }
+  }
+  'posts.edit': {
+    methods: ["GET","HEAD"]
+    pattern: '/posts/:id/edit'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['edit']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['edit']>>>
+    }
+  }
+  'posts.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/posts/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['show']>>>
+    }
+  }
+  'posts.store': {
+    methods: ["POST"]
+    pattern: '/posts'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/posts/create_post_validator').createPostValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/posts/create_post_validator').createPostValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'posts.update': {
+    methods: ["PUT"]
+    pattern: '/posts/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/posts/update_post_validator').updatePostValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/posts/update_post_validator').updatePostValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'posts.destroy': {
+    methods: ["DELETE"]
+    pattern: '/posts/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['destroy']>>>
+    }
+  }
+  'tags.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/tags/:slug'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { slug: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['show']>>>
+    }
+  }
 }
