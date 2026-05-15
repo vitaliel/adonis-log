@@ -1,6 +1,6 @@
 # Story 1.1: Project Foundation — Database, Bootstrap & Inertia Layout
 
-Status: review
+Status: done
 
 ## Story
 
@@ -54,6 +54,13 @@ So that I have a working, navigable application shell before any features are bu
   - [x] Run `node ace migration:run` — confirm `tmp/db.sqlite3` created with correct `users` schema
 - [x] Verify application boots and layout renders (AC: #2, #3, #5)
   - [x] Run `node ace serve --hmr` and confirm Bootstrap styles are visible and layout renders
+
+### Review Findings
+
+- [x] [Review][Patch] `PageProps` was added but not applied across page components [`inertia/types.ts:7`]
+- [x] [Review][Patch] Flash toast effect fires on every render due to missing dependency array [`inertia/layouts/MainLayout.tsx:14`]
+- [x] [Review][Patch] Mobile navbar toggle requires Bootstrap JS bundle but it is not loaded [`inertia/layouts/MainLayout.tsx:26`]
+- [x] [Review][Patch] Layout does not currently use `row`/`col-*` Bootstrap grid classes [`inertia/layouts/MainLayout.tsx:75`]
 
 ## Dev Notes
 

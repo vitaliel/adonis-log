@@ -1,6 +1,7 @@
 import { Form } from '@adonisjs/inertia/react'
+import { type PageProps } from '~/types'
 
-export default function Login() {
+export default function Login(_props: PageProps) {
   return (
     <div className="form-container">
       <div>

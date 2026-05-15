@@ -1,4 +1,6 @@
-export default function Home() {
+import { type PageProps } from '~/types'
+
+export default function Home(_props: PageProps) {
   return (
     <>
       <div className="hero">
