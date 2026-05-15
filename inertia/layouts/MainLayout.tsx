@@ -5,7 +5,7 @@ import { type ReactNode, useEffect } from 'react'
 import { type PageProps } from '~/types'
 
 export default function MainLayout({ children }: { children: ReactNode }) {
-  const { auth, flash } = usePage<PageProps>().props
+  const { auth, flash } = usePage().props as unknown as PageProps
 
   useEffect(() => {
     toast.dismiss()
