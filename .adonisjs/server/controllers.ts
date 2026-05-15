@@ -5,4 +5,6 @@
 
 export const controllers = {
   Auth: () => import('#controllers/auth_controller'),
+  Posts: () => import('#controllers/posts_controller'),
+  Tags: () => import('#controllers/tags_controller'),
 }

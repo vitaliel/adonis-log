@@ -1,6 +1,6 @@
 # Story 2.1: Post List & Post Detail (Public Read)
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -26,60 +26,60 @@ So that I can discover and consume content on the platform.
 
 ## Tasks / Subtasks
 
-- [ ] Create migrations (AC: #1, #3, #4)
-  - [ ] `node ace make:migration create_posts_table` — columns: `id`, `user_id` (FK → users, notNull), `title` (string, notNull), `body` (text, notNull), `created_at`, `updated_at`
-  - [ ] `node ace make:migration create_tags_table` — columns: `id`, `name` (string, notNull, unique), `slug` (string, notNull, unique), `created_at`, `updated_at`
-  - [ ] `node ace make:migration create_post_tags_table` — pivot: `post_id` (FK → posts), `tag_id` (FK → tags); composite unique on `(post_id, tag_id)`; no `created_at`/`updated_at` needed (pivot only)
-  - [ ] Run `node ace migration:run` to verify migrations apply cleanly
+- [x] Create migrations (AC: #1, #3, #4)
+  - [x] `node ace make:migration create_posts_table` — columns: `id`, `user_id` (FK → users, notNull), `title` (string, notNull), `body` (text, notNull), `created_at`, `updated_at`
+  - [x] `node ace make:migration create_tags_table` — columns: `id`, `name` (string, notNull, unique), `slug` (string, notNull, unique), `created_at`, `updated_at`
+  - [x] `node ace make:migration create_post_tags_table` — pivot: `post_id` (FK → posts), `tag_id` (FK → tags); composite unique on `(post_id, tag_id)`; no `created_at`/`updated_at` needed (pivot only)
+  - [x] Run `node ace migration:run` to verify migrations apply cleanly
 
-- [ ] Create `app/models/post.ts` (AC: #1, #3)
-  - [ ] `@column() declare id: number`; `@column() declare userId: number`; `@column() declare title: string`; `@column() declare body: string`; `@column.dateTime() declare createdAt: DateTime`; `@column.dateTime() declare updatedAt: DateTime`
-  - [ ] `@belongsTo(() => User) declare author: BelongsTo<typeof User>`
-  - [ ] `@belongsToMany(() => Tag, { pivotTable: 'post_tags' }) declare tags: ManyToMany<typeof Tag>`
+- [x] Create `app/models/post.ts` (AC: #1, #3)
+  - [x] `@column() declare id: number`; `@column() declare userId: number`; `@column() declare title: string`; `@column() declare body: string`; `@column.dateTime() declare createdAt: DateTime`; `@column.dateTime() declare updatedAt: DateTime`
+  - [x] `@belongsTo(() => User) declare author: BelongsTo<typeof User>`
+  - [x] `@belongsToMany(() => Tag, { pivotTable: 'post_tags' }) declare tags: ManyToMany<typeof Tag>`
 
-- [ ] Create `app/models/tag.ts` (AC: #4)
-  - [ ] `@column() declare id: number`; `@column() declare name: string`; `@column() declare slug: string`; `@column.dateTime() declare createdAt: DateTime`; `@column.dateTime() declare updatedAt: DateTime`
-  - [ ] `@belongsToMany(() => Post, { pivotTable: 'post_tags' }) declare posts: ManyToMany<typeof Post>`
+- [x] Create `app/models/tag.ts` (AC: #4)
+  - [x] `@column() declare id: number`; `@column() declare name: string`; `@column() declare slug: string`; `@column.dateTime() declare createdAt: DateTime`; `@column.dateTime() declare updatedAt: DateTime`
+  - [x] `@belongsToMany(() => Post, { pivotTable: 'post_tags' }) declare posts: ManyToMany<typeof Post>`
 
-- [ ] Create `app/controllers/posts_controller.ts` (AC: #1, #2, #3)
-  - [ ] `index({ request, inertia })` — paginate 10/page; preload `author` + `tags`; format `created_at`; pass `like_count: 0` placeholder; return `inertia.render('posts/PostIndex', { posts, meta })`
-  - [ ] `show({ params, inertia })` — `Post.query().where('id', params.id).preload('author').preload('tags').firstOrFail()`; return `inertia.render('posts/PostShow', { post, like_count: 0, comments: [] })`
+- [x] Create `app/controllers/posts_controller.ts` (AC: #1, #2, #3)
+  - [x] `index({ request, inertia })` — paginate 10/page; preload `author` + `tags`; format `created_at`; pass `like_count: 0` placeholder; return `inertia.render('posts/PostIndex', { posts, meta })`
+  - [x] `show({ params, inertia })` — `Post.query().where('id', params.id).preload('author').preload('tags').firstOrFail()`; return `inertia.render('posts/PostShow', { post, like_count: 0, comments: [] })`
 
-- [ ] Create `app/controllers/tags_controller.ts` (AC: #4)
-  - [ ] `show({ params, request, inertia })` — find tag by `slug`; query posts via `tag.related('posts').query().preload('author').paginate(page, 10)`; return `inertia.render('posts/PostIndex', { posts, meta, active_tag: tag.name })`
+- [x] Create `app/controllers/tags_controller.ts` (AC: #4)
+  - [x] `show({ params, request, inertia })` — find tag by `slug`; query posts via `tag.related('posts').query().preload('author').paginate(page, 10)`; return `inertia.render('posts/PostIndex', { posts, meta, active_tag: tag.name })`
 
-- [ ] Create `inertia/components/Pagination.tsx` (AC: #2, #4)
-  - [ ] Accepts `meta: { current_page, last_page, first_page_url, last_page_url, next_page_url, prev_page_url }` prop
-  - [ ] Renders Bootstrap pagination using Inertia `<Link>` (NOT `<a>`) for page navigation
+- [x] Create `inertia/components/Pagination.tsx` (AC: #2, #4)
+  - [x] Accepts `meta: { current_page, last_page, first_page_url, last_page_url, next_page_url, prev_page_url }` prop
+  - [x] Renders Bootstrap pagination using Inertia `<Link>` (NOT `<a>`) for page navigation
 
-- [ ] Create `inertia/components/TagBadge.tsx` (AC: #1, #4)
-  - [ ] Accepts `tag: { name: string; slug: string }` prop
-  - [ ] Renders a Bootstrap `badge bg-secondary` wrapped in Inertia `<Link href="/tags/:slug">`
+- [x] Create `inertia/components/TagBadge.tsx` (AC: #1, #4)
+  - [x] Accepts `tag: { name: string; slug: string }` prop
+  - [x] Renders a Bootstrap `badge bg-secondary` wrapped in Inertia `<Link href="/tags/:slug">`
 
-- [ ] Create `inertia/pages/posts/PostIndex.tsx` (AC: #1, #2, #4)
-  - [ ] Accepts `posts` (serialized array), `meta` (pagination meta), optional `active_tag?: string`
-  - [ ] Renders Bootstrap card list per post: title (link to `/posts/:id`), author username, formatted date, tag badges, like count
-  - [ ] Renders `<Pagination>` component at bottom
+- [x] Create `inertia/pages/posts/PostIndex.tsx` (AC: #1, #2, #4)
+  - [x] Accepts `posts` (serialized array), `meta` (pagination meta), optional `active_tag?: string`
+  - [x] Renders Bootstrap card list per post: title (link to `/posts/:id`), author username, formatted date, tag badges, like count
+  - [x] Renders `<Pagination>` component at bottom
 
-- [ ] Create `inertia/pages/posts/PostShow.tsx` (AC: #3)
-  - [ ] Accepts `post`, optional `comments?: CommentType[]` (default `[]`), optional `like_count?: number` (default `0`)
-  - [ ] Renders post title, author, date, body, tag badges
-  - [ ] Leaves comments and like sections as empty stubs ready for Epic 4
+- [x] Create `inertia/pages/posts/PostShow.tsx` (AC: #3)
+  - [x] Accepts `post`, optional `comments?: CommentType[]` (default `[]`), optional `like_count?: number` (default `0`)
+  - [x] Renders post title, author, date, body, tag badges
+  - [x] Leaves comments and like sections as empty stubs ready for Epic 4
 
-- [ ] Update `start/routes.ts` (AC: #1, #2, #3, #4)
-  - [ ] Add `GET /posts` → `[PostsController, 'index']` with `silent_auth_middleware`, named `posts.index`
-  - [ ] Add `GET /posts/:id` → `[PostsController, 'show']` with `silent_auth_middleware`, named `posts.show`
-  - [ ] Add `GET /tags/:slug` → `[TagsController, 'show']` with `silent_auth_middleware`, named `tags.show`
-  - [ ] Apply `middleware.silentAuth()` to all three routes (public, but auth user may be loaded)
+- [x] Update `start/routes.ts` (AC: #1, #2, #3, #4)
+  - [x] Add `GET /posts` → `[PostsController, 'index']` with `silent_auth_middleware`, named `posts.index`
+  - [x] Add `GET /posts/:id` → `[PostsController, 'show']` with `silent_auth_middleware`, named `posts.show`
+  - [x] Add `GET /tags/:slug` → `[TagsController, 'show']` with `silent_auth_middleware`, named `tags.show`
+  - [x] Apply `middleware.silentAuth()` to all three routes (public, but auth user may be loaded)
 
-- [ ] Fix TODO redirects in `app/controllers/auth_controller.ts` (AC: #5, #6)
-  - [ ] `login()` method: replace `response.redirect('/')` with `response.redirect('/posts')`
-  - [ ] `logout()` method: replace `response.redirect('/')` with `response.redirect('/posts')`
+- [x] Fix TODO redirects in `app/controllers/auth_controller.ts` (AC: #5, #6)
+  - [x] `login()` method: replace `response.redirect('/')` with `response.redirect('/posts')`
+  - [x] `logout()` method: replace `response.redirect('/')` with `response.redirect('/posts')`
 
-- [ ] Update `inertia/types.ts` with new types
-  - [ ] Add `Post`, `Tag`, `PaginationMeta` interfaces consistent with serialized Lucid output (snake_case field names)
+- [x] Update `inertia/types.ts` with new types
+  - [x] Add `Post`, `Tag`, `PaginationMeta` interfaces consistent with serialized Lucid output (snake_case field names)
 
-- [ ] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+- [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
 
 ## Dev Notes
 
@@ -590,10 +590,54 @@ Files **untouched**:
 
 ### Agent Model Used
 
-Claude Sonnet 4.6 (claude-sonnet-4.6)
+GPT-5.3-Codex
 
 ### Debug Log References
 
+- `node ace make:migration create_posts_table`
+- `node ace make:migration create_tags_table`
+- `node ace make:migration create_post_tags_table`
+- `node ace migration:run`
+- `npm run typecheck`
+- `npm run lint`
+- `node ace test --files tests/functional/posts_public_read.spec.ts`
+- `node ace test`
+
 ### Completion Notes List
 
+- Implemented Story 2.1 public read flow with new `posts`, `tags`, and `post_tags` schema, including foreign keys and cascade cleanup.
+- Added `Post` and `Tag` Lucid models with many-to-many relationships and `author` relation for post ownership.
+- Added `PostsController` and `TagsController` with eager-loading (`author`, `tags`), reverse-chronological pagination, and formatted display dates.
+- Added Inertia UI surface: `PostIndex`, `PostShow`, `Pagination`, and `TagBadge` using Inertia `Link` navigation.
+- Updated `auth_controller` redirects for register/login/logout to `/posts`.
+- Added routes for `/posts`, `/posts/:id`, and `/tags/:slug` and exposed `middleware.silentAuth()` for route-level usage.
+- Added Story 2.1 integration tests (`tests/functional/posts_public_read.spec.ts`) covering eager-loading and tag-scoped post query behavior.
+- Regenerated Adonis indexes/types via test bootstrap (`.adonisjs/server/controllers.ts`, `.adonisjs/server/pages.d.ts`) and validated all checks pass.
+
 ### File List
+
+- `.adonisjs/server/controllers.ts` (modified)
+- `.adonisjs/server/pages.d.ts` (modified)
+- `_bmad-output/implementation-artifacts/2-1-post-list-post-detail-public-read.md` (modified)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (modified)
+- `app/controllers/auth_controller.ts` (modified)
+- `app/controllers/posts_controller.ts` (added)
+- `app/controllers/tags_controller.ts` (added)
+- `app/models/post.ts` (added)
+- `app/models/tag.ts` (added)
+- `database/migrations/1778863088284_create_posts_table.ts` (added)
+- `database/migrations/1778863089253_create_tags_table.ts` (added)
+- `database/migrations/1778863090383_create_post_tags_table.ts` (added)
+- `database/schema.ts` (modified)
+- `inertia/components/Pagination.tsx` (added)
+- `inertia/components/TagBadge.tsx` (added)
+- `inertia/pages/posts/PostIndex.tsx` (added)
+- `inertia/pages/posts/PostShow.tsx` (added)
+- `inertia/types.ts` (modified)
+- `start/kernel.ts` (modified)
+- `start/routes.ts` (modified)
+- `tests/functional/posts_public_read.spec.ts` (added)
+
+## Change Log
+
+- 2026-05-15: Implemented Story 2.1 end-to-end, added schema/models/controllers/routes/UI/types/tests, and moved status to `review`.

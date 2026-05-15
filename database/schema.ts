@@ -7,6 +7,47 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class PostTagSchema extends BaseModel {
+  static $columns = ['postId', 'tagId'] as const
+  $columns = PostTagSchema.$columns
+  @column()
+  declare postId: number
+  @column()
+  declare tagId: number
+}
+
+export class PostSchema extends BaseModel {
+  static $columns = ['body', 'createdAt', 'id', 'title', 'updatedAt', 'userId'] as const
+  $columns = PostSchema.$columns
+  @column()
+  declare body: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: number
+}
+
+export class TagSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'name', 'slug', 'updatedAt'] as const
+  $columns = TagSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare slug: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
 export class UserSchema extends BaseModel {
   static $columns = [
     'bio',

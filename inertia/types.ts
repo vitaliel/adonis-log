@@ -17,3 +17,33 @@ export interface PageProps {
   flash: { success?: string; error?: string }
   errors: Record<string, string>
 }
+
+export interface PaginationMeta {
+  total: number
+  per_page: number
+  current_page: number
+  last_page: number
+  first_page: number
+  first_page_url: string
+  last_page_url: string
+  next_page_url: string | null
+  prev_page_url: string | null
+}
+
+export interface TagSummary {
+  name: string
+  slug: string
+}
+
+export interface PostSummary {
+  id: number
+  title: string
+  author_username: string
+  created_at: string
+  tags: TagSummary[]
+  like_count: number
+}
+
+export interface PostDetail extends PostSummary {
+  body: string
+}
