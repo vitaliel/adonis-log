@@ -1,6 +1,6 @@
 # Story 4.2: Likes on Posts & Comments
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -32,36 +32,36 @@ so that I can express appreciation for content I find valuable.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create migrations for `post_likes` and `comment_likes` tables (AC: #2, #5, #8)
-  - [ ] `node ace make:migration create_post_likes_table` — columns: `post_id`, `user_id`, unique constraint, `created_at`
-  - [ ] `node ace make:migration create_comment_likes_table` — columns: `comment_id`, `user_id`, unique constraint, `created_at`
-  - [ ] Run `node ace migration:run` and verify schema
-- [ ] Task 2: Create `PostLike` and `CommentLike` Lucid models (AC: #2, #5)
-  - [ ] `app/models/post_like.ts` with `postId`, `userId`, `createdAt`, `belongsTo Post`, `belongsTo User`
-  - [ ] `app/models/comment_like.ts` with `commentId`, `userId`, `createdAt`, `belongsTo Comment`, `belongsTo User`
-- [ ] Task 3: Update `Post` and `Comment` models with like relations (AC: #2, #5)
-  - [ ] Add `hasMany(() => PostLike)` to `Post` model
-  - [ ] Add `hasMany(() => CommentLike)` to `Comment` model
-- [ ] Task 4: Create `PostLikesController` and `CommentLikesController` (AC: #2, #3, #5, #7, #8)
-  - [ ] `app/controllers/post_likes_controller.ts` — `store` (firstOrCreate) and `destroy` (find + delete)
-  - [ ] `app/controllers/comment_likes_controller.ts` — `store` (firstOrCreate) and `destroy` (find + delete)
-- [ ] Task 5: Add like routes to `start/routes.ts` (AC: #7)
-  - [ ] `POST /posts/:postId/likes` → `PostLikesController.store` (auth)
-  - [ ] `DELETE /posts/:postId/likes` → `PostLikesController.destroy` (auth)
-  - [ ] `POST /posts/:postId/comments/:commentId/likes` → `CommentLikesController.store` (auth)
-  - [ ] `DELETE /posts/:postId/comments/:commentId/likes` → `CommentLikesController.destroy` (auth)
-- [ ] Task 6: Update `PostsController` to pass real like counts and `user_has_liked` (AC: #1, #4, #9)
-  - [ ] `show()` — use `withCount('postLikes')`, query `user_has_liked`, bulk-load comment likes
-  - [ ] `index()` — use `withCount('postLikes')` to replace hardcoded `like_count: 0`
-- [ ] Task 7: Update `inertia/types.ts` (AC: #1, #4)
-  - [ ] Add `user_has_liked: boolean` to `PostSummary`
-  - [ ] Add `like_count: number` and `user_has_liked: boolean` to `Comment`
-- [ ] Task 8: Create `inertia/components/LikeButton.tsx` reusable component (AC: #1, #4, #6)
-- [ ] Task 9: Update `PostShow.tsx` to integrate like buttons (AC: #1, #3, #4, #5, #6)
-  - [ ] Replace static `Like count: {like_count}` text with `<LikeButton>` on post
-  - [ ] Add `<LikeButton>` to each comment card
-  - [ ] Accept new props: `user_has_liked`, updated `comments` shape
-- [ ] Task 10: Run quality gates — `npm run typecheck`, `npm run lint`, `node ace test`
+- [x] Task 1: Create migrations for `post_likes` and `comment_likes` tables (AC: #2, #5, #8)
+  - [x] `node ace make:migration create_post_likes_table` — columns: `post_id`, `user_id`, unique constraint, `created_at`
+  - [x] `node ace make:migration create_comment_likes_table` — columns: `comment_id`, `user_id`, unique constraint, `created_at`
+  - [x] Run `node ace migration:run` and verify schema
+- [x] Task 2: Create `PostLike` and `CommentLike` Lucid models (AC: #2, #5)
+  - [x] `app/models/post_like.ts` with `postId`, `userId`, `createdAt`, `belongsTo Post`, `belongsTo User`
+  - [x] `app/models/comment_like.ts` with `commentId`, `userId`, `createdAt`, `belongsTo Comment`, `belongsTo User`
+- [x] Task 3: Update `Post` and `Comment` models with like relations (AC: #2, #5)
+  - [x] Add `hasMany(() => PostLike)` to `Post` model
+  - [x] Add `hasMany(() => CommentLike)` to `Comment` model
+- [x] Task 4: Create `PostLikesController` and `CommentLikesController` (AC: #2, #3, #5, #7, #8)
+  - [x] `app/controllers/post_likes_controller.ts` — `store` (firstOrCreate) and `destroy` (find + delete)
+  - [x] `app/controllers/comment_likes_controller.ts` — `store` (firstOrCreate) and `destroy` (find + delete)
+- [x] Task 5: Add like routes to `start/routes.ts` (AC: #7)
+  - [x] `POST /posts/:postId/likes` → `PostLikesController.store` (auth)
+  - [x] `DELETE /posts/:postId/likes` → `PostLikesController.destroy` (auth)
+  - [x] `POST /posts/:postId/comments/:commentId/likes` → `CommentLikesController.store` (auth)
+  - [x] `DELETE /posts/:postId/comments/:commentId/likes` → `CommentLikesController.destroy` (auth)
+- [x] Task 6: Update `PostsController` to pass real like counts and `user_has_liked` (AC: #1, #4, #9)
+  - [x] `show()` — use `withCount('postLikes')`, query `user_has_liked`, bulk-load comment likes
+  - [x] `index()` — use `withCount('postLikes')` to replace hardcoded `like_count: 0`
+- [x] Task 7: Update `inertia/types.ts` (AC: #1, #4)
+  - [x] Add `user_has_liked: boolean` to `PostSummary`
+  - [x] Add `like_count: number` and `user_has_liked: boolean` to `Comment`
+- [x] Task 8: Create `inertia/components/LikeButton.tsx` reusable component (AC: #1, #4, #6)
+- [x] Task 9: Update `PostShow.tsx` to integrate like buttons (AC: #1, #3, #4, #5, #6)
+  - [x] Replace static `Like count: {like_count}` text with `<LikeButton>` on post
+  - [x] Add `<LikeButton>` to each comment card
+  - [x] Accept new props: `user_has_liked`, updated `comments` shape
+- [x] Task 10: Run quality gates — `npm run typecheck`, `npm run lint`, `node ace test`
 
 ## Dev Notes
 
@@ -503,4 +503,33 @@ Claude Sonnet 4.6 (claude-sonnet-4.6)
 
 ### Completion Notes List
 
+- Implemented likes for posts and comments using two separate tables (`post_likes`, `comment_likes`) per architecture decision (no polymorphic pattern).
+- Used `firstOrCreate` for idempotent like creation and silent `delete` for unlike — no error on double-unlike.
+- Bulk-loaded comment likes in `show()` using a single `whereIn` query to avoid N+1 problem.
+- `withCount('postLikes')` returns a string from SQLite driver; wrapped with `Number()` in all serializations.
+- `LikeButton` uses Inertia's `useForm` with `preserveScroll: true` to prevent page jump when liking mid-page.
+- Unauthenticated users see a static heart count (♥ N); no like button shown (AC #6).
+- Auth middleware on all like routes ensures unauthenticated POST/DELETE redirects to `/login` (AC #7).
+- Removed top-level `like_count` prop from PostShow — now inside `post` object.
+- All 22 existing tests pass, typecheck clean, lint clean.
+
 ### File List
+
+database/migrations/1778948878749_create_post_likes_table.ts
+database/migrations/1778948879813_create_comment_likes_table.ts
+app/models/post_like.ts
+app/models/comment_like.ts
+app/models/post.ts
+app/models/comment.ts
+app/controllers/post_likes_controller.ts
+app/controllers/comment_likes_controller.ts
+start/routes.ts
+app/controllers/posts_controller.ts
+inertia/types.ts
+inertia/components/LikeButton.tsx
+inertia/pages/posts/PostShow.tsx
+database/schema.ts
+
+## Change Log
+
+- 2026-05-16: Implemented Story 4.2 — Likes on Posts & Comments. Added `post_likes` and `comment_likes` migrations/models, `PostLikesController`/`CommentLikesController` with toggle logic, 4 new authenticated routes, updated `PostsController` to serve real like counts and per-user liked state, added `LikeButton` React component, updated `PostShow.tsx` to display interactive like buttons on posts and comments.

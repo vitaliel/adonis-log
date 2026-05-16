@@ -42,6 +42,7 @@ export interface PostSummary {
   created_at: string
   tags: TagSummary[]
   like_count: number
+  user_has_liked: boolean
 }
 
 export interface PostDetail extends PostSummary {
@@ -54,6 +55,8 @@ export interface Comment {
   author_username: string
   created_at: string
   is_own: boolean
+  like_count: number
+  user_has_liked: boolean
 }
 
 export interface SocialLink {
