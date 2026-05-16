@@ -10,7 +10,8 @@ export default class extends BaseSchema {
       table.string('type').notNullable()
       table.string('url').notNullable()
       table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('updated_at').notNullable()
+      table.index(['user_id'])
     })
   }
 

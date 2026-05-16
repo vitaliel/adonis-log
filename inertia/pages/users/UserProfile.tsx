@@ -32,17 +32,21 @@ export default function UserProfile({ user, posts, meta }: UserProfileProps) {
 
         {user.socialLinks.length > 0 && (
           <div className="mb-2">
-            {user.socialLinks.map((link) => (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-sm btn-outline-secondary me-2 mb-1"
-              >
-                {link.type}
-              </a>
-            ))}
+            {user.socialLinks.map((link) => {
+              const safeHref = /^(https?:)\/\//i.test(link.url) ? link.url : '#'
+
+              return (
+                <a
+                  key={link.id}
+                  href={safeHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-sm btn-outline-secondary me-2 mb-1"
+                >
+                  {link.type}
+                </a>
+              )
+            })}
           </div>
         )}
       </div>
@@ -58,7 +62,7 @@ export default function UserProfile({ user, posts, meta }: UserProfileProps) {
               <Link href={`/posts/${post.id}`}>{post.title}</Link>
             </h5>
             <p className="card-text text-muted small mb-2">
-              {post.created_at} | Like count: {post.like_count}
+              By {post.author_username} | {post.created_at} | Like count: {post.like_count}
             </p>
             <div>
               {post.tags.map((tag) => (

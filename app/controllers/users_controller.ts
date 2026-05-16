@@ -14,6 +14,7 @@ export default class UsersController {
       .where('userId', user.id)
       .preload('tags')
       .orderBy('created_at', 'desc')
+      .orderBy('id', 'desc')
       .paginate(page, 10)
 
     return inertia.render(

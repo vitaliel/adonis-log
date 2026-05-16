@@ -1,6 +1,6 @@
 # Story 3.1: Public User Profile Page
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -63,6 +63,14 @@ so that I can learn about authors and browse their published posts.
   - [x] `UserProfile` interface: `{ id: number; username: string; bio: string | null; socialLinks: SocialLink[] }`
 
 - [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+
+### Review Findings
+
+- [x] [Review][Patch] Normalize `updated_at` nullability contract (`updated_at` should be NOT NULL) [database/migrations/1778934403518_create_user_social_links_table.ts:13]
+- [x] [Review][Patch] Add stable secondary ordering for paginated posts [app/controllers/users_controller.ts:16]
+- [x] [Review][Patch] Sanitize social-link URLs before rendering external anchors [inertia/pages/users/UserProfile.tsx:38]
+- [x] [Review][Patch] Restore PostSummary metadata parity on profile cards (include author) [inertia/pages/users/UserProfile.tsx:60]
+- [x] [Review][Patch] Index `user_social_links.user_id` for relation lookups [database/migrations/1778934403518_create_user_social_links_table.ts:9]
 
 ## Dev Notes
 
