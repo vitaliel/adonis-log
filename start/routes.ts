@@ -13,6 +13,7 @@ import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const PostsController = () => import('#controllers/posts_controller')
 const TagsController = () => import('#controllers/tags_controller')
+const UsersController = () => import('#controllers/users_controller')
 
 router.on('/').renderInertia('home', {}).as('home')
 
@@ -46,3 +47,5 @@ router.put('/posts/:id', [PostsController, 'update']).as('posts.update').use(mid
 router.delete('/posts/:id', [PostsController, 'destroy']).as('posts.destroy').use(middleware.auth())
 
 router.get('/tags/:slug', [TagsController, 'show']).as('tags.show')
+
+router.get('/users/:username', [UsersController, 'show']).as('users.show')

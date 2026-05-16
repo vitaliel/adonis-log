@@ -1,6 +1,6 @@
 # Story 3.1: Public User Profile Page
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -24,45 +24,45 @@ so that I can learn about authors and browse their published posts.
 
 ## Tasks / Subtasks
 
-- [ ] Create migration `TIMESTAMP_create_user_social_links_table.ts` (AC: #1, #2)
-  - [ ] `node ace make:migration create_user_social_links_table`
-  - [ ] Columns: `id` (increments PK), `user_id` (integer, notNullable, FK → users.id onDelete CASCADE), `type` (string, notNullable), `url` (string, notNullable), `created_at`, `updated_at`
-  - [ ] Run `node ace migration:run` (regenerates `database/schema.ts`)
+- [x] Create migration `TIMESTAMP_create_user_social_links_table.ts` (AC: #1, #2)
+  - [x] `node ace make:migration create_user_social_links_table`
+  - [x] Columns: `id` (increments PK), `user_id` (integer, notNullable, FK → users.id onDelete CASCADE), `type` (string, notNullable), `url` (string, notNullable), `created_at`, `updated_at`
+  - [x] Run `node ace migration:run` (regenerates `database/schema.ts`)
 
-- [ ] Create `app/models/user_social_link.ts` with `UserSocialLink` model (AC: #1)
-  - [ ] Columns matching schema: `id`, `userId`, `type`, `url`, `createdAt`, `updatedAt`
-  - [ ] `@belongsTo(() => User)` for ownership relation
+- [x] Create `app/models/user_social_link.ts` with `UserSocialLink` model (AC: #1)
+  - [x] Columns matching schema: `id`, `userId`, `type`, `url`, `createdAt`, `updatedAt`
+  - [x] `@belongsTo(() => User)` for ownership relation
 
-- [ ] Update `app/models/user.ts` to add relations (AC: #1, #4)
-  - [ ] `@hasMany(() => Post, { foreignKey: 'userId' })` → `declare posts: HasMany<typeof Post>`
-  - [ ] `@hasMany(() => UserSocialLink, { foreignKey: 'userId' })` → `declare socialLinks: HasMany<typeof UserSocialLink>`
-  - [ ] Add necessary imports (`hasMany`, `HasMany`, `Post`, `UserSocialLink`)
+- [x] Update `app/models/user.ts` to add relations (AC: #1, #4)
+  - [x] `@hasMany(() => Post, { foreignKey: 'userId' })` → `declare posts: HasMany<typeof Post>`
+  - [x] `@hasMany(() => UserSocialLink, { foreignKey: 'userId' })` → `declare socialLinks: HasMany<typeof UserSocialLink>`
+  - [x] Add necessary imports (`hasMany`, `HasMany`, `Post`, `UserSocialLink`)
 
-- [ ] Create `app/controllers/users_controller.ts` with `show` method (AC: #1–#5)
-  - [ ] Lazy-import `UsersController` in routes (match pattern of `PostsController`)
-  - [ ] `show({ params, request, inertia }: HttpContext)`:
-    - [ ] Find user by username: `User.query().where('username', params.username).firstOrFail()` — throws `ModelNotFoundException` → 404 automatically
-    - [ ] Preload social links: `.preload('socialLinks')`
-    - [ ] Paginate posts via separate query: `Post.query().where('userId', user.id).preload('tags').orderBy('created_at', 'desc').paginate(page, 10)`
-    - [ ] Return `inertia.render('users/UserProfile' as never, { user, posts, meta } as any)`
+- [x] Create `app/controllers/users_controller.ts` with `show` method (AC: #1–#5)
+  - [x] Lazy-import `UsersController` in routes (match pattern of `PostsController`)
+  - [x] `show({ params, request, inertia }: HttpContext)`:
+    - [x] Find user by username: `User.query().where('username', params.username).firstOrFail()` — throws `ModelNotFoundException` → 404 automatically
+    - [x] Preload social links: `.preload('socialLinks')`
+    - [x] Paginate posts via separate query: `Post.query().where('userId', user.id).preload('tags').orderBy('created_at', 'desc').paginate(page, 10)`
+    - [x] Return `inertia.render('users/UserProfile' as never, { user, posts, meta } as any)`
 
-- [ ] Add route `GET /users/:username` to `start/routes.ts` (AC: #1–#3)
-  - [ ] `router.get('/users/:username', [UsersController, 'show']).as('users.show')`
-  - [ ] No middleware (public route — uses global silent auth)
+- [x] Add route `GET /users/:username` to `start/routes.ts` (AC: #1–#3)
+  - [x] `router.get('/users/:username', [UsersController, 'show']).as('users.show')`
+  - [x] No middleware (public route — uses global silent auth)
 
-- [ ] Create `inertia/pages/users/UserProfile.tsx` (AC: #1–#5)
-  - [ ] Props: `user` (id, username, bio, socialLinks[]), `posts: PostSummary[]`, `meta: PaginationMeta`
-  - [ ] Show bio section only if `user.bio` is non-null/non-empty
-  - [ ] Show social links section only if `user.socialLinks.length > 0`; render each as `<a href={link.url} target="_blank">` with `link.type` as label
-  - [ ] Render posts list using same pattern as `PostIndex.tsx` (card with title link, date, tag badges)
-  - [ ] Render `<Pagination meta={meta} />` below posts list
-  - [ ] Import `Link` from `@adonisjs/inertia/react` (NOT from `@inertiajs/react`)
+- [x] Create `inertia/pages/users/UserProfile.tsx` (AC: #1–#5)
+  - [x] Props: `user` (id, username, bio, socialLinks[]), `posts: PostSummary[]`, `meta: PaginationMeta`
+  - [x] Show bio section only if `user.bio` is non-null/non-empty
+  - [x] Show social links section only if `user.socialLinks.length > 0`; render each as `<a href={link.url} target="_blank">` with `link.type` as label
+  - [x] Render posts list using same pattern as `PostIndex.tsx` (card with title link, date, tag badges)
+  - [x] Render `<Pagination meta={meta} />` below posts list
+  - [x] Import `Link` from `@adonisjs/inertia/react` (NOT from `@inertiajs/react`)
 
-- [ ] Update `inertia/types.ts` to add new types (AC: #1)
-  - [ ] `SocialLink` interface: `{ id: number; type: string; url: string }`
-  - [ ] `UserProfile` interface: `{ id: number; username: string; bio: string | null; socialLinks: SocialLink[] }`
+- [x] Update `inertia/types.ts` to add new types (AC: #1)
+  - [x] `SocialLink` interface: `{ id: number; type: string; url: string }`
+  - [x] `UserProfile` interface: `{ id: number; username: string; bio: string | null; socialLinks: SocialLink[] }`
 
-- [ ] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+- [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
 
 ## Dev Notes
 
@@ -364,6 +364,30 @@ Claude Sonnet 4.6
 
 ### Debug Log References
 
+- Prettier formatting applied via `eslint --fix` on `users_controller.ts` and `database/schema.ts` after auto-generation.
+
 ### Completion Notes List
 
+- Created `user_social_links` migration with FK → users.id CASCADE and ran it successfully; `database/schema.ts` auto-regenerated.
+- Created `UserSocialLink` model with `@belongsTo(() => User)`.
+- Extended `User` model with `@hasMany(() => Post)` and `@hasMany(() => UserSocialLink)` relations (circular import safe via lazy function pattern).
+- Created `UsersController.show`: finds user by username (`firstOrFail()` → 404), preloads `socialLinks`, paginates posts with tags, returns Inertia response.
+- Added public `GET /users/:username` route with `users.show` name.
+- Created `inertia/pages/users/UserProfile.tsx`: conditionally renders bio, social links, paginated post cards, `<Pagination />`.
+- Added `SocialLink` and `UserProfile` interfaces to `inertia/types.ts`.
+- All checks pass: `npm run typecheck` ✅, `npm run lint` ✅, `node ace test` 17/17 ✅.
+
 ### File List
+
+- `database/migrations/1778934403518_create_user_social_links_table.ts` (new)
+- `database/schema.ts` (auto-regenerated)
+- `app/models/user_social_link.ts` (new)
+- `app/models/user.ts` (modified)
+- `app/controllers/users_controller.ts` (new)
+- `start/routes.ts` (modified)
+- `inertia/pages/users/UserProfile.tsx` (new)
+- `inertia/types.ts` (modified)
+
+### Change Log
+
+- **2026-05-16** — Implemented Story 3.1: Public User Profile Page. Added `user_social_links` table/model, extended `User` model with `posts`/`socialLinks` relations, created `UsersController.show` with pagination, added public route `GET /users/:username`, created `UserProfile.tsx` React page, added `SocialLink`/`UserProfile` types.

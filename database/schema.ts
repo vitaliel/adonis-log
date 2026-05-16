@@ -48,6 +48,23 @@ export class TagSchema extends BaseModel {
   declare updatedAt: DateTime
 }
 
+export class UserSocialLinkSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'type', 'updatedAt', 'url', 'userId'] as const
+  $columns = UserSocialLinkSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare type: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare url: string
+  @column()
+  declare userId: number
+}
+
 export class UserSchema extends BaseModel {
   static $columns = [
     'bio',
