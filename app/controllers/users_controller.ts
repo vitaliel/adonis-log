@@ -1,8 +1,60 @@
 import User from '#models/user'
 import Post from '#models/post'
+import UserSocialLink from '#models/user_social_link'
+import UserPolicy from '#policies/user_policy'
+import { updateProfileValidator } from '#validators/users/update_profile_validator'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
+  async edit({ params, inertia, bouncer }: HttpContext) {
+    const user = await User.query()
+      .where('username', params.username)
+      .preload('socialLinks')
+      .firstOrFail()
+
+    await bouncer.with(UserPolicy).authorize('edit', user)
+
+    return inertia.render(
+      'users/UserEdit' as never,
+      {
+        user: {
+          id: user.id,
+          username: user.username,
+          bio: user.bio,
+          socialLinks: user.socialLinks.map((link) => ({
+            id: link.id,
+            type: link.type,
+            url: link.url,
+          })),
+        },
+      } as any
+    )
+  }
+
+  async update({ params, request, response, session, bouncer }: HttpContext) {
+    const user = await User.query()
+      .where('username', params.username)
+      .preload('socialLinks')
+      .firstOrFail()
+
+    await bouncer.with(UserPolicy).authorize('edit', user)
+
+    const { bio, social_links: socialLinks } = await request.validateUsing(updateProfileValidator)
+
+    user.bio = bio ?? null
+    await user.save()
+
+    await user.related('socialLinks').query().delete()
+    if (socialLinks && socialLinks.length > 0) {
+      await UserSocialLink.createMany(
+        socialLinks.map((link) => ({ userId: user.id, type: link.type, url: link.url }))
+      )
+    }
+
+    session.flash('success', 'Profile updated successfully')
+    return response.redirect(`/users/${user.username}`)
+  }
+
   async show({ params, request, inertia }: HttpContext) {
     const user = await User.query()
       .where('username', params.username)

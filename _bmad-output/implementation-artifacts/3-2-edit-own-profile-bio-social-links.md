@@ -1,6 +1,6 @@
 # Story 3.2: Edit Own Profile (Bio & Social Links)
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -26,46 +26,46 @@ so that other users can learn about me and find me elsewhere online.
 
 ## Tasks / Subtasks
 
-- [ ] Create `app/policies/user_policy.ts` with `UserPolicy` (AC: #6)
-  - [ ] Extend `BasePolicy` from `@adonisjs/bouncer`
-  - [ ] `edit(authUser: User, profile: User): AuthorizerResponse { return profile.id === authUser.id }`
-  - [ ] Follow exact same shape as `app/policies/post_policy.ts`
+- [x] Create `app/policies/user_policy.ts` with `UserPolicy` (AC: #6)
+  - [x] Extend `BasePolicy` from `@adonisjs/bouncer`
+  - [x] `edit(authUser: User, profile: User): AuthorizerResponse { return profile.id === authUser.id }`
+  - [x] Follow exact same shape as `app/policies/post_policy.ts`
 
-- [ ] Create `app/validators/users/update_profile_validator.ts` (AC: #5)
-  - [ ] `bio`: `vine.string().trim().maxLength(500).nullable().optional()`
-  - [ ] `social_links`: `vine.array(vine.object({ type: vine.string().trim().minLength(1).maxLength(50), url: vine.string().trim().url().maxLength(500) })).optional()`
-  - [ ] Use `vine.compile(vine.object({...}))` pattern — same as `update_post_validator.ts`
+- [x] Create `app/validators/users/update_profile_validator.ts` (AC: #5)
+  - [x] `bio`: `vine.string().trim().maxLength(500).nullable().optional()`
+  - [x] `social_links`: `vine.array(vine.object({ type: vine.string().trim().minLength(1).maxLength(50), url: vine.string().trim().url().maxLength(500) })).optional()`
+  - [x] Use `vine.compile(vine.object({...}))` pattern — same as `update_post_validator.ts`
 
-- [ ] Add `edit` and `update` methods to `app/controllers/users_controller.ts` (AC: #1–#6)
-  - [ ] `edit({ params, inertia, bouncer }: HttpContext)`:
-    - [ ] Find user by username: `User.query().where('username', params.username).preload('socialLinks').firstOrFail()`
-    - [ ] `await bouncer.with(UserPolicy).authorize('edit', user)` — throws `E_AUTHORIZATION_FAILURE` → redirect
-    - [ ] Return `inertia.render('users/UserEdit' as never, { user: { id, username, bio, socialLinks: [...] } } as any)`
-  - [ ] `update({ params, request, response, session, bouncer }: HttpContext)`:
-    - [ ] Find user by username: `User.query().where('username', params.username).preload('socialLinks').firstOrFail()`
-    - [ ] `await bouncer.with(UserPolicy).authorize('edit', user)` — ownership check
-    - [ ] `const { bio, social_links } = await request.validateUsing(updateProfileValidator)`
-    - [ ] `user.bio = bio ?? null; await user.save()`
-    - [ ] Replace social links: `await user.related('socialLinks').query().delete()` then re-create from `social_links` array
-    - [ ] `session.flash('success', 'Profile updated successfully')`
-    - [ ] `return response.redirect(`/users/${user.username}`)`
+- [x] Add `edit` and `update` methods to `app/controllers/users_controller.ts` (AC: #1–#6)
+  - [x] `edit({ params, inertia, bouncer }: HttpContext)`:
+    - [x] Find user by username: `User.query().where('username', params.username).preload('socialLinks').firstOrFail()`
+    - [x] `await bouncer.with(UserPolicy).authorize('edit', user)` — throws `E_AUTHORIZATION_FAILURE` → redirect
+    - [x] Return `inertia.render('users/UserEdit' as never, { user: { id, username, bio, socialLinks: [...] } } as any)`
+  - [x] `update({ params, request, response, session, bouncer }: HttpContext)`:
+    - [x] Find user by username: `User.query().where('username', params.username).preload('socialLinks').firstOrFail()`
+    - [x] `await bouncer.with(UserPolicy).authorize('edit', user)` — ownership check
+    - [x] `const { bio, social_links } = await request.validateUsing(updateProfileValidator)`
+    - [x] `user.bio = bio ?? null; await user.save()`
+    - [x] Replace social links: `await user.related('socialLinks').query().delete()` then re-create from `social_links` array
+    - [x] `session.flash('success', 'Profile updated successfully')`
+    - [x] `return response.redirect(`/users/${user.username}`)`
 
-- [ ] Add routes to `start/routes.ts` (AC: #1, #6)
-  - [ ] `router.get('/users/:username/edit', [UsersController, 'edit']).as('users.edit').use(middleware.auth())`
-  - [ ] `router.put('/users/:username', [UsersController, 'update']).as('users.update').use(middleware.auth())`
-  - [ ] Place immediately after `router.get('/users/:username', ...)` line
+- [x] Add routes to `start/routes.ts` (AC: #1, #6)
+  - [x] `router.get('/users/:username/edit', [UsersController, 'edit']).as('users.edit').use(middleware.auth())`
+  - [x] `router.put('/users/:username', [UsersController, 'update']).as('users.update').use(middleware.auth())`
+  - [x] Place immediately after `router.get('/users/:username', ...)` line
 
-- [ ] Create `inertia/pages/users/UserEdit.tsx` (AC: #1–#5)
-  - [ ] Props: `user: { id: number; username: string; bio: string | null; socialLinks: SocialLink[] }`
-  - [ ] Use `useForm` from `@inertiajs/react` — same import as `PostEdit.tsx` (NOT from `@adonisjs/inertia/react`)
-  - [ ] Initial form state: `{ bio: user.bio ?? '', social_links: user.socialLinks.map(l => ({ type: l.type, url: l.url })) }`
-  - [ ] Dynamic social links: add row button (`+`), remove row button (`×`) per row
-  - [ ] `handleSubmit`: `e.preventDefault(); form.put(`/users/${user.username}`)`
-  - [ ] Inline validation: `form.errors['social_links.0.url']` pattern for nested errors
-  - [ ] Cancel link: `<a href={`/users/${user.username}`}>` using plain anchor (public route)
-  - [ ] `import { type PageProps, type SocialLink } from '~/types'` — reuse existing `SocialLink` interface
+- [x] Create `inertia/pages/users/UserEdit.tsx` (AC: #1–#5)
+  - [x] Props: `user: { id: number; username: string; bio: string | null; socialLinks: SocialLink[] }`
+  - [x] Use `useForm` from `@inertiajs/react` — same import as `PostEdit.tsx` (NOT from `@adonisjs/inertia/react`)
+  - [x] Initial form state: `{ bio: user.bio ?? '', social_links: user.socialLinks.map(l => ({ type: l.type, url: l.url })) }`
+  - [x] Dynamic social links: add row button (`+`), remove row button (`×`) per row
+  - [x] `handleSubmit`: `e.preventDefault(); form.put(`/users/${user.username}`)`
+  - [x] Inline validation: `form.errors['social_links.0.url']` pattern for nested errors
+  - [x] Cancel link: `<a href={`/users/${user.username}`}>` using plain anchor (public route)
+  - [x] `import { type PageProps, type SocialLink } from '~/types'` — reuse existing `SocialLink` interface
 
-- [ ] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+- [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
 
 ## Dev Notes
 
@@ -362,10 +362,32 @@ Files **not to touch**:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Sonnet 4.6 (claude-sonnet-4.6)
 
 ### Debug Log References
 
+- Lint error: `social_links` destructuring violated `@typescript-eslint/naming-convention` camelCase rule. Fixed by aliasing: `const { bio, social_links: socialLinks } = await request.validateUsing(...)`.
+
 ### Completion Notes List
 
+- Created `UserPolicy` following exact `PostPolicy` shape — Bouncer `authorize('edit', user)` throws on ownership mismatch.
+- Created `updateProfileValidator` with nullable/optional bio and array social_links with url validation.
+- Added `edit` and `update` methods to `UsersController` with Bouncer authorization on both.
+- Added two authenticated routes: `GET /users/:username/edit` and `PUT /users/:username`.
+- Created `UserEdit.tsx` with dynamic social links rows (add/remove), inline VineJS error display via `form.errors as Record<string, string>` cast for nested keys like `social_links.0.url`.
+- Replace-all strategy for social links: delete all then batch-insert new set via `UserSocialLink.createMany`.
+- 22 tests passing (5 new: 2 unit UserPolicy + 3 functional profile_edit).
+
 ### File List
+
+- `app/policies/user_policy.ts` — new
+- `app/validators/users/update_profile_validator.ts` — new
+- `app/controllers/users_controller.ts` — modified (added edit/update methods + 3 imports)
+- `start/routes.ts` — modified (added users.edit and users.update routes)
+- `inertia/pages/users/UserEdit.tsx` — new
+- `tests/unit/user_policy.spec.ts` — new
+- `tests/functional/profile_edit.spec.ts` — new
+
+## Change Log
+
+- 2026-05-16: Implemented Story 3.2 — Edit Own Profile (Bio & Social Links). Added UserPolicy (Bouncer), updateProfileValidator (VineJS), UsersController edit/update, authenticated routes, UserEdit React page with dynamic social links, and full test suite.
