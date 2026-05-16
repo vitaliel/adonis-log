@@ -5,7 +5,9 @@
 
 export const controllers = {
   Auth: () => import('#controllers/auth_controller'),
+  CommentLikes: () => import('#controllers/comment_likes_controller'),
   Comments: () => import('#controllers/comments_controller'),
+  PostLikes: () => import('#controllers/post_likes_controller'),
   Posts: () => import('#controllers/posts_controller'),
   Tags: () => import('#controllers/tags_controller'),
   Users: () => import('#controllers/users_controller'),

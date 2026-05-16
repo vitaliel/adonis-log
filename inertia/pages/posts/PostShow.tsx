@@ -1,12 +1,12 @@
 import { Link } from '@adonisjs/inertia/react'
 import { useForm } from '@inertiajs/react'
 import { TagBadge } from '~/components/TagBadge'
+import { LikeButton } from '~/components/LikeButton'
 import { type PageProps, type PostDetail, type Comment } from '~/types'
 
 interface PostShowProps extends PageProps {
-  post: PostDetail
+  post: PostDetail & { user_has_liked: boolean }
   comments?: Comment[]
-  like_count?: number
   can_edit?: boolean
   is_authenticated?: boolean
 }
@@ -14,7 +14,6 @@ interface PostShowProps extends PageProps {
 export default function PostShow({
   post,
   comments = [],
-  like_count = 0,
   can_edit = false,
   is_authenticated = false,
 }: PostShowProps) {
@@ -43,8 +42,16 @@ export default function PostShow({
     <article>
       <h1 className="mb-2">{post.title}</h1>
       <p className="text-muted small">
-        By {post.author_username} | {post.created_at} | Like count: {like_count}
+        By {post.author_username} | {post.created_at}
       </p>
+      <div className="mb-3">
+        <LikeButton
+          likeCount={post.like_count}
+          userHasLiked={post.user_has_liked}
+          likeUrl={`/posts/${post.id}/likes`}
+          isAuthenticated={is_authenticated}
+        />
+      </div>
 
       <div className="mb-3">
         {post.tags.map((tag) => (
@@ -83,15 +90,23 @@ export default function PostShow({
               <p className="text-muted small mb-0">
                 {comment.author_username} · {comment.created_at}
               </p>
-              {comment.is_own && (
-                <button
-                  className="btn btn-sm btn-outline-danger mt-2"
-                  onClick={() => handleDeleteComment(post.id, comment.id)}
-                  disabled={deleteCommentForm.processing}
-                >
-                  Delete
-                </button>
-              )}
+              <div className="mt-2 d-flex align-items-center gap-2">
+                <LikeButton
+                  likeCount={comment.like_count}
+                  userHasLiked={comment.user_has_liked}
+                  likeUrl={`/posts/${post.id}/comments/${comment.id}/likes`}
+                  isAuthenticated={is_authenticated}
+                />
+                {comment.is_own && (
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleDeleteComment(post.id, comment.id)}
+                    disabled={deleteCommentForm.processing}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}

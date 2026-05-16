@@ -1,5 +1,7 @@
 import Post from '#models/post'
 import PostPolicy from '#policies/post_policy'
+import PostLike from '#models/post_like'
+import CommentLike from '#models/comment_like'
 import Tag from '#models/tag'
 import { createPostValidator } from '#validators/posts/create_post_validator'
 import { updatePostValidator } from '#validators/posts/update_post_validator'
@@ -50,6 +52,7 @@ export default class PostsController {
     const posts = await Post.query()
       .preload('author')
       .preload('tags')
+      .withCount('postLikes', (q) => q.as('likes_count'))
       .orderBy('created_at', 'desc')
       .paginate(page, 10)
 
@@ -59,7 +62,8 @@ export default class PostsController {
       author_username: post.author.username,
       created_at: post.createdAt.toFormat('MMM d, yyyy'),
       tags: post.tags.map((tag) => ({ name: tag.name, slug: tag.slug })),
-      like_count: 0,
+      like_count: Number(post.$extras.likes_count),
+      user_has_liked: false,
     }))
 
     return inertia.render(
@@ -77,9 +81,27 @@ export default class PostsController {
       .preload('author')
       .preload('tags')
       .preload('comments', (q) => q.preload('author').orderBy('created_at', 'asc'))
+      .withCount('postLikes', (q) => q.as('likes_count'))
       .firstOrFail()
 
     const canEdit = auth.user ? await bouncer.with(PostPolicy).allows('edit', post) : false
+
+    const userHasLikedPost = auth.user
+      ? !!(await PostLike.query().where('postId', post.id).where('userId', auth.user.id).first())
+      : false
+
+    const commentIds = post.comments.map((c) => c.id)
+    const allCommentLikes =
+      commentIds.length > 0 ? await CommentLike.query().whereIn('commentId', commentIds) : []
+
+    const commentLikeCountMap: Record<number, number> = {}
+    const userLikedCommentSet = new Set<number>()
+    for (const cl of allCommentLikes) {
+      commentLikeCountMap[cl.commentId] = (commentLikeCountMap[cl.commentId] ?? 0) + 1
+      if (auth.user && cl.userId === auth.user.id) {
+        userLikedCommentSet.add(cl.commentId)
+      }
+    }
 
     return inertia.render(
       'posts/PostShow' as never,
@@ -91,10 +113,10 @@ export default class PostsController {
           author_username: post.author.username,
           created_at: post.createdAt.toFormat('MMM d, yyyy'),
           tags: post.tags.map((tag) => ({ name: tag.name, slug: tag.slug })),
-          like_count: 0,
+          like_count: Number(post.$extras.likes_count),
+          user_has_liked: userHasLikedPost,
         },
         can_edit: canEdit,
-        like_count: 0,
         is_authenticated: !!auth.user,
         comments: post.comments.map((c) => ({
           id: c.id,
@@ -102,6 +124,8 @@ export default class PostsController {
           author_username: c.author.username,
           created_at: c.createdAt.toFormat('MMM d, yyyy'),
           is_own: auth.user ? c.userId === auth.user.id : false,
+          like_count: commentLikeCountMap[c.id] ?? 0,
+          user_has_liked: userLikedCommentSet.has(c.id),
         })),
       } as any
     )

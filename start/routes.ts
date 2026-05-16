@@ -15,6 +15,8 @@ const PostsController = () => import('#controllers/posts_controller')
 const CommentsController = () => import('#controllers/comments_controller')
 const TagsController = () => import('#controllers/tags_controller')
 const UsersController = () => import('#controllers/users_controller')
+const PostLikesController = () => import('#controllers/post_likes_controller')
+const CommentLikesController = () => import('#controllers/comment_likes_controller')
 
 router.on('/').renderInertia('home', {}).as('home')
 
@@ -55,6 +57,26 @@ router
 router
   .delete('/posts/:postId/comments/:id', [CommentsController, 'destroy'])
   .as('comments.destroy')
+  .use(middleware.auth())
+
+router
+  .post('/posts/:postId/likes', [PostLikesController, 'store'])
+  .as('post_likes.store')
+  .use(middleware.auth())
+
+router
+  .delete('/posts/:postId/likes', [PostLikesController, 'destroy'])
+  .as('post_likes.destroy')
+  .use(middleware.auth())
+
+router
+  .post('/posts/:postId/comments/:commentId/likes', [CommentLikesController, 'store'])
+  .as('comment_likes.store')
+  .use(middleware.auth())
+
+router
+  .delete('/posts/:postId/comments/:commentId/likes', [CommentLikesController, 'destroy'])
+  .as('comment_likes.destroy')
   .use(middleware.auth())
 
 router.get('/tags/:slug', [TagsController, 'show']).as('tags.show')
