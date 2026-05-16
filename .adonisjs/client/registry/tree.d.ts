@@ -21,7 +21,24 @@ export interface ApiDefinition {
     update: typeof routes['posts.update']
     destroy: typeof routes['posts.destroy']
   }
+  comments: {
+    store: typeof routes['comments.store']
+    destroy: typeof routes['comments.destroy']
+  }
+  postLikes: {
+    store: typeof routes['post_likes.store']
+    destroy: typeof routes['post_likes.destroy']
+  }
+  commentLikes: {
+    store: typeof routes['comment_likes.store']
+    destroy: typeof routes['comment_likes.destroy']
+  }
   tags: {
     show: typeof routes['tags.show']
+  }
+  users: {
+    show: typeof routes['users.show']
+    edit: typeof routes['users.edit']
+    update: typeof routes['users.update']
   }
 }

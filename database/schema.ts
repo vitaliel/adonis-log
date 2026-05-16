@@ -97,7 +97,7 @@ export class UserSocialLinkSchema extends BaseModel {
   @column()
   declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  declare updatedAt: DateTime
   @column()
   declare url: string
   @column()
