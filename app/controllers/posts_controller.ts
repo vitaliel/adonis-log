@@ -76,6 +76,7 @@ export default class PostsController {
       .where('id', params.id)
       .preload('author')
       .preload('tags')
+      .preload('comments', (q) => q.preload('author').orderBy('created_at', 'asc'))
       .firstOrFail()
 
     const canEdit = auth.user ? await bouncer.with(PostPolicy).allows('edit', post) : false
@@ -94,7 +95,14 @@ export default class PostsController {
         },
         can_edit: canEdit,
         like_count: 0,
-        comments: [],
+        is_authenticated: !!auth.user,
+        comments: post.comments.map((c) => ({
+          id: c.id,
+          body: c.body,
+          author_username: c.author.username,
+          created_at: c.createdAt.toFormat('MMM d, yyyy'),
+          is_own: auth.user ? c.userId === auth.user.id : false,
+        })),
       } as any
     )
   }
