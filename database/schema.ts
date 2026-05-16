@@ -7,6 +7,23 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class CommentSchema extends BaseModel {
+  static $columns = ['body', 'createdAt', 'id', 'postId', 'updatedAt', 'userId'] as const
+  $columns = CommentSchema.$columns
+  @column()
+  declare body: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare postId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: number
+}
+
 export class PostTagSchema extends BaseModel {
   static $columns = ['postId', 'tagId'] as const
   $columns = PostTagSchema.$columns

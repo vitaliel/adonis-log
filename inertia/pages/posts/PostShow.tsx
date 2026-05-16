@@ -1,28 +1,42 @@
 import { Link } from '@adonisjs/inertia/react'
 import { useForm } from '@inertiajs/react'
 import { TagBadge } from '~/components/TagBadge'
-import { type PageProps, type PostDetail } from '~/types'
-
-type CommentType = {
-  id: number
-  body: string
-  author_username: string
-  created_at: string
-}
+import { type PageProps, type PostDetail, type Comment } from '~/types'
 
 interface PostShowProps extends PageProps {
   post: PostDetail
-  comments?: CommentType[]
+  comments?: Comment[]
   like_count?: number
   can_edit?: boolean
+  is_authenticated?: boolean
 }
 
-export default function PostShow({ post, comments = [], like_count = 0, can_edit = false }: PostShowProps) {
-  const deleteForm = useForm({})
+export default function PostShow({
+  post,
+  comments = [],
+  like_count = 0,
+  can_edit = false,
+  is_authenticated = false,
+}: PostShowProps) {
+  const deletePostForm = useForm({})
+  const deleteCommentForm = useForm({})
+  const commentForm = useForm({ body: '' })
 
-  function handleDelete() {
+  function handleDeletePost() {
     if (!window.confirm('Are you sure you want to delete this post?')) return
-    deleteForm.delete(`/posts/${post.id}`)
+    deletePostForm.delete(`/posts/${post.id}`)
+  }
+
+  function handleDeleteComment(postId: number, commentId: number) {
+    if (!window.confirm('Delete this comment?')) return
+    deleteCommentForm.delete(`/posts/${postId}/comments/${commentId}`)
+  }
+
+  function handleCommentSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    commentForm.post(`/posts/${post.id}/comments`, {
+      onSuccess: () => commentForm.reset(),
+    })
   }
 
   return (
@@ -49,16 +63,71 @@ export default function PostShow({ post, comments = [], like_count = 0, can_edit
           </Link>
           <button
             className="btn btn-sm btn-outline-danger"
-            onClick={handleDelete}
-            disabled={deleteForm.processing}
+            onClick={handleDeletePost}
+            disabled={deletePostForm.processing}
           >
-            {deleteForm.processing ? 'Deleting…' : 'Delete'}
+            {deletePostForm.processing ? 'Deleting…' : 'Delete'}
           </button>
         </div>
       )}
 
-      <section className="mt-4">
+      <section className="mt-5">
         <h4>Comments ({comments.length})</h4>
+
+        {comments.length === 0 && <p className="text-muted">No comments yet.</p>}
+
+        {comments.map((comment) => (
+          <div key={comment.id} className="card mb-3">
+            <div className="card-body">
+              <p className="mb-1">{comment.body}</p>
+              <p className="text-muted small mb-0">
+                {comment.author_username} · {comment.created_at}
+              </p>
+              {comment.is_own && (
+                <button
+                  className="btn btn-sm btn-outline-danger mt-2"
+                  onClick={() => handleDeleteComment(post.id, comment.id)}
+                  disabled={deleteCommentForm.processing}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+
+        <div className="mt-4">
+          {is_authenticated ? (
+            <form onSubmit={handleCommentSubmit}>
+              <div className="mb-3">
+                <label htmlFor="comment-body" className="form-label fw-semibold">
+                  Leave a comment
+                </label>
+                <textarea
+                  id="comment-body"
+                  className={`form-control ${commentForm.errors.body ? 'is-invalid' : ''}`}
+                  rows={3}
+                  value={commentForm.data.body}
+                  onChange={(e) => commentForm.setData('body', e.target.value)}
+                />
+                {commentForm.errors.body && (
+                  <div className="invalid-feedback">{commentForm.errors.body}</div>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={commentForm.processing}
+              >
+                {commentForm.processing ? 'Posting…' : 'Post Comment'}
+              </button>
+            </form>
+          ) : (
+            <p className="text-muted">
+              <Link href="/login">Log in</Link> to leave a comment.
+            </p>
+          )}
+        </div>
       </section>
     </article>
   )

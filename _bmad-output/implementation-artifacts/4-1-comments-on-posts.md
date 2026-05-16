@@ -1,6 +1,6 @@
 # Story 4.1: Comments on Posts
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -30,56 +30,56 @@ so that I can engage in discussion around content.
 
 ## Tasks / Subtasks
 
-- [ ] Create migration `database/migrations/TIMESTAMP_create_comments_table.ts` (AC: #1, #2)
-  - [ ] `post_id` integer NOT NULL (FK → `posts.id` on delete cascade)
-  - [ ] `user_id` integer NOT NULL (FK → `users.id`)
-  - [ ] `body` text NOT NULL
-  - [ ] `created_at` / `updated_at` timestamps
-  - [ ] Run `node ace migration:run`
+- [x] Create migration `database/migrations/TIMESTAMP_create_comments_table.ts` (AC: #1, #2)
+  - [x] `post_id` integer NOT NULL (FK → `posts.id` on delete cascade)
+  - [x] `user_id` integer NOT NULL (FK → `users.id`)
+  - [x] `body` text NOT NULL
+  - [x] `created_at` / `updated_at` timestamps
+  - [x] Run `node ace migration:run`
 
-- [ ] Create `app/models/comment.ts` (AC: #1, #2, #6, #7)
-  - [ ] Extend `BaseModel`; `@column({ isPrimary: true }) declare id: number`
-  - [ ] `@column() declare postId: number`
-  - [ ] `@column() declare userId: number`
-  - [ ] `@column() declare body: string`
-  - [ ] `@column.dateTime({ autoCreate: true }) declare createdAt: DateTime`
-  - [ ] `@column.dateTime({ autoCreate: true, autoUpdate: true }) declare updatedAt: DateTime`
-  - [ ] `@belongsTo(() => User, { foreignKey: 'userId' }) declare author: BelongsTo<typeof User>`
-  - [ ] `@belongsTo(() => Post, { foreignKey: 'postId' }) declare post: BelongsTo<typeof Post>`
+- [x] Create `app/models/comment.ts` (AC: #1, #2, #6, #7)
+  - [x] Extend `BaseModel`; `@column({ isPrimary: true }) declare id: number`
+  - [x] `@column() declare postId: number`
+  - [x] `@column() declare userId: number`
+  - [x] `@column() declare body: string`
+  - [x] `@column.dateTime({ autoCreate: true }) declare createdAt: DateTime`
+  - [x] `@column.dateTime({ autoCreate: true, autoUpdate: true }) declare updatedAt: DateTime`
+  - [x] `@belongsTo(() => User, { foreignKey: 'userId' }) declare author: BelongsTo<typeof User>`
+  - [x] `@belongsTo(() => Post, { foreignKey: 'postId' }) declare post: BelongsTo<typeof Post>`
 
-- [ ] Add `hasMany(() => Comment)` to `app/models/post.ts` (AC: #1)
-  - [ ] Import `Comment` and `HasMany` — add `@hasMany(() => Comment, { foreignKey: 'postId' }) declare comments: HasMany<typeof Comment>`
+- [x] Add `hasMany(() => Comment)` to `app/models/post.ts` (AC: #1)
+  - [x] Import `Comment` and `HasMany` — add `@hasMany(() => Comment, { foreignKey: 'postId' }) declare comments: HasMany<typeof Comment>`
 
-- [ ] Create `app/validators/comments/create_comment_validator.ts` (AC: #3)
-  - [ ] `body: vine.string().trim().minLength(1).maxLength(5000)` — validates non-empty
-  - [ ] Use `vine.compile(vine.object({...}))` pattern same as other validators
+- [x] Create `app/validators/comments/create_comment_validator.ts` (AC: #3)
+  - [x] `body: vine.string().trim().minLength(1).maxLength(5000)` — validates non-empty
+  - [x] Use `vine.compile(vine.object({...}))` pattern same as other validators
 
-- [ ] Create `app/policies/comment_policy.ts` (AC: #8)
-  - [ ] Extend `BasePolicy`; `delete(user: User, comment: Comment): AuthorizerResponse { return comment.userId === user.id }`
-  - [ ] Follow exact same shape as `PostPolicy`
+- [x] Create `app/policies/comment_policy.ts` (AC: #8)
+  - [x] Extend `BasePolicy`; `delete(user: User, comment: Comment): AuthorizerResponse { return comment.userId === user.id }`
+  - [x] Follow exact same shape as `PostPolicy`
 
-- [ ] Create `app/controllers/comments_controller.ts` (AC: #2–#8)
-  - [ ] `store({ params, request, response, auth }: HttpContext)`:
-    - [ ] `const post = await Post.findOrFail(params.postId)` — 404 if post not found
-    - [ ] `const { body } = await request.validateUsing(createCommentValidator)` — VineJS throws `E_VALIDATION_ERROR` on failure → Inertia surfaces inline errors
-    - [ ] `await Comment.create({ postId: post.id, userId: auth.user!.id, body })`
-    - [ ] `return response.redirect(`/posts/${post.id}`)`
-  - [ ] `destroy({ params, response, bouncer }: HttpContext)`:
-    - [ ] `const comment = await Comment.findOrFail(params.id)`
-    - [ ] `await bouncer.with(CommentPolicy).authorize('delete', comment)` — 403 on failure
-    - [ ] `await comment.delete()`
-    - [ ] `return response.redirect(`/posts/${comment.postId}`)`
+- [x] Create `app/controllers/comments_controller.ts` (AC: #2–#8)
+  - [x] `store({ params, request, response, auth }: HttpContext)`:
+    - [x] `const post = await Post.findOrFail(params.postId)` — 404 if post not found
+    - [x] `const { body } = await request.validateUsing(createCommentValidator)` — VineJS throws `E_VALIDATION_ERROR` on failure → Inertia surfaces inline errors
+    - [x] `await Comment.create({ postId: post.id, userId: auth.user!.id, body })`
+    - [x] `return response.redirect(`/posts/${post.id}`)`
+  - [x] `destroy({ params, response, bouncer }: HttpContext)`:
+    - [x] `const comment = await Comment.findOrFail(params.id)`
+    - [x] `await bouncer.with(CommentPolicy).authorize('delete', comment)` — 403 on failure
+    - [x] `await comment.delete()`
+    - [x] `return response.redirect(`/posts/${comment.postId}`)`
 
-- [ ] Add routes to `start/routes.ts` (AC: #2, #5, #7, #8)
-  - [ ] `const CommentsController = () => import('#controllers/comments_controller')`
-  - [ ] `router.post('/posts/:postId/comments', [CommentsController, 'store']).as('comments.store').use(middleware.auth())`
-  - [ ] `router.delete('/posts/:postId/comments/:id', [CommentsController, 'destroy']).as('comments.destroy').use(middleware.auth())`
-  - [ ] Add routes after the existing posts routes block
+- [x] Add routes to `start/routes.ts` (AC: #2, #5, #7, #8)
+  - [x] `const CommentsController = () => import('#controllers/comments_controller')`
+  - [x] `router.post('/posts/:postId/comments', [CommentsController, 'store']).as('comments.store').use(middleware.auth())`
+  - [x] `router.delete('/posts/:postId/comments/:id', [CommentsController, 'destroy']).as('comments.destroy').use(middleware.auth())`
+  - [x] Add routes after the existing posts routes block
 
-- [ ] Update `app/controllers/posts_controller.ts` show() (AC: #1, #6)
-  - [ ] Add `Comment` import: `import Comment from '#models/comment'`
-  - [ ] Add `.preload('comments', (q) => q.preload('author').orderBy('created_at', 'asc'))` to the post query
-  - [ ] Map comments in the rendered props:
+- [x] Update `app/controllers/posts_controller.ts` show() (AC: #1, #6)
+  - [x] Add `Comment` import: `import Comment from '#models/comment'`
+  - [x] Add `.preload('comments', (q) => q.preload('author').orderBy('created_at', 'asc'))` to the post query
+  - [x] Map comments in the rendered props:
     ```ts
     comments: post.comments.map((c) => ({
       id: c.id,
@@ -89,21 +89,21 @@ so that I can engage in discussion around content.
       is_own: auth.user ? c.userId === auth.user.id : false,
     }))
     ```
-  - [ ] Pass `is_authenticated: !!auth.user` in the render props
+  - [x] Pass `is_authenticated: !!auth.user` in the render props
 
-- [ ] Update `inertia/types.ts` — add `Comment` type
-  - [ ] Add: `export interface Comment { id: number; body: string; author_username: string; created_at: string; is_own: boolean }`
-  - [ ] Update `PostShowProps` or add to the page component types
+- [x] Update `inertia/types.ts` — add `Comment` type
+  - [x] Add: `export interface Comment { id: number; body: string; author_username: string; created_at: string; is_own: boolean }`
+  - [x] Update `PostShowProps` or add to the page component types
 
-- [ ] Update `inertia/pages/posts/PostShow.tsx` (AC: #1–#7)
-  - [ ] Import `Comment` type from `~/types`; import `useForm` from `@inertiajs/react`
-  - [ ] Add `is_authenticated?: boolean` to props
-  - [ ] Render full comments section: list each comment (body, author, date, delete button if `c.is_own`)
-  - [ ] Delete form: `useForm({})` → `form.delete(`/posts/${post.id}/comments/${c.id}`)` with confirm dialog
-  - [ ] Comment submission form (only if `is_authenticated`): `useForm({ body: '' })` → `form.post(`/posts/${post.id}/comments`)` with inline `form.errors.body` display
-  - [ ] If not authenticated: show `<p>...</p>` prompt to log in instead of form
+- [x] Update `inertia/pages/posts/PostShow.tsx` (AC: #1–#7)
+  - [x] Import `Comment` type from `~/types`; import `useForm` from `@inertiajs/react`
+  - [x] Add `is_authenticated?: boolean` to props
+  - [x] Render full comments section: list each comment (body, author, date, delete button if `c.is_own`)
+  - [x] Delete form: `useForm({})` → `form.delete(`/posts/${post.id}/comments/${c.id}`)` with confirm dialog
+  - [x] Comment submission form (only if `is_authenticated`): `useForm({ body: '' })` → `form.post(`/posts/${post.id}/comments`)` with inline `form.errors.body` display
+  - [x] If not authenticated: show `<p>...</p>` prompt to log in instead of form
 
-- [ ] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+- [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
 
 ## Dev Notes
 
@@ -537,6 +537,37 @@ Claude Sonnet 4.6 (claude-sonnet-4.6)
 
 ### Debug Log References
 
+- Removed unused `Comment` import from `posts_controller.ts` — TypeScript `TS6133` error; the ORM relation on the post model provides typing without a direct import.
+- Auto-generated `database/schema.ts` had a Prettier formatting issue (pre-existing) — fixed via `npm run lint -- --fix`.
+
 ### Completion Notes List
 
+- ✅ Created `database/migrations/1778943387923_create_comments_table.ts` with `post_id` FK (CASCADE), `user_id` FK, `body` text, and timestamps. Migration ran successfully.
+- ✅ Created `app/models/comment.ts` with full Lucid model: `belongsTo` relations to `User` (author) and `Post`.
+- ✅ Updated `app/models/post.ts` to add `hasMany(() => Comment)` relation.
+- ✅ Created `app/validators/comments/create_comment_validator.ts` with `trim().minLength(1).maxLength(5000)`.
+- ✅ Created `app/policies/comment_policy.ts` mirroring `PostPolicy` shape — `delete` checks `userId === user.id`.
+- ✅ Created `app/controllers/comments_controller.ts` with `store` and `destroy` actions.
+- ✅ Added comment routes to `start/routes.ts` with `auth` middleware.
+- ✅ Updated `posts_controller.ts` `show()` to preload comments (with author) ordered chronologically; passes `is_authenticated` and `comments` array (with `is_own`) to React.
+- ✅ Added `Comment` interface to `inertia/types.ts`.
+- ✅ Replaced `PostShow.tsx` with full comments section: list, delete (own only), submit form (authenticated only), "Log in to comment" prompt for guests.
+- ✅ All quality gates passed: `npm run typecheck` clean, `npm run lint` clean, `node ace test` — 22/22 passed.
+
 ### File List
+
+database/migrations/1778943387923_create_comments_table.ts
+app/models/comment.ts
+app/models/post.ts
+app/validators/comments/create_comment_validator.ts
+app/policies/comment_policy.ts
+app/controllers/comments_controller.ts
+app/controllers/posts_controller.ts
+start/routes.ts
+inertia/types.ts
+inertia/pages/posts/PostShow.tsx
+database/schema.ts
+
+### Change Log
+
+- 2026-05-16: Implemented Story 4.1 — Comments on Posts. Added `comments` table migration, `Comment` model, `CommentPolicy`, `CommentsController`, VineJS validator, two new routes (POST/DELETE), updated `PostsController.show()` to eager-load comments, updated `inertia/types.ts`, and fully replaced `PostShow.tsx` with interactive comments section (list, delete, submit form, guest prompt). All ACs #1–#8 satisfied.

@@ -48,6 +48,14 @@ export interface PostDetail extends PostSummary {
   body: string
 }
 
+export interface Comment {
+  id: number
+  body: string
+  author_username: string
+  created_at: string
+  is_own: boolean
+}
+
 export interface SocialLink {
   id: number
   type: string

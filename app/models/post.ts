@@ -1,8 +1,9 @@
 import User from '#models/user'
 import Tag from './tag.js'
+import Comment from './comment.js'
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -34,4 +35,7 @@ export default class Post extends BaseModel {
     pivotRelatedForeignKey: 'tag_id',
   })
   declare tags: ManyToMany<typeof Tag>
+
+  @hasMany(() => Comment, { foreignKey: 'postId' })
+  declare comments: HasMany<typeof Comment>
 }
