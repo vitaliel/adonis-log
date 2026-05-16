@@ -163,6 +163,78 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/posts_controller').default['destroy']>>>
     }
   }
+  'comments.store': {
+    methods: ["POST"]
+    pattern: '/posts/:postId/comments'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/comments/create_comment_validator').createCommentValidator)>>
+      paramsTuple: [ParamValue]
+      params: { postId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/comments/create_comment_validator').createCommentValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comments_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comments_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'comments.destroy': {
+    methods: ["DELETE"]
+    pattern: '/posts/:postId/comments/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { postId: ParamValue; id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comments_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comments_controller').default['destroy']>>>
+    }
+  }
+  'post_likes.store': {
+    methods: ["POST"]
+    pattern: '/posts/:postId/likes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { postId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/post_likes_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/post_likes_controller').default['store']>>>
+    }
+  }
+  'post_likes.destroy': {
+    methods: ["DELETE"]
+    pattern: '/posts/:postId/likes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { postId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/post_likes_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/post_likes_controller').default['destroy']>>>
+    }
+  }
+  'comment_likes.store': {
+    methods: ["POST"]
+    pattern: '/posts/:postId/comments/:commentId/likes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { postId: ParamValue; commentId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comment_likes_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comment_likes_controller').default['store']>>>
+    }
+  }
+  'comment_likes.destroy': {
+    methods: ["DELETE"]
+    pattern: '/posts/:postId/comments/:commentId/likes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { postId: ParamValue; commentId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comment_likes_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comment_likes_controller').default['destroy']>>>
+    }
+  }
   'tags.show': {
     methods: ["GET","HEAD"]
     pattern: '/tags/:slug'
@@ -173,6 +245,42 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['show']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tags_controller').default['show']>>>
+    }
+  }
+  'users.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/users/:username'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { username: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
+    }
+  }
+  'users.edit': {
+    methods: ["GET","HEAD"]
+    pattern: '/users/:username/edit'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { username: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['edit']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['edit']>>>
+    }
+  }
+  'users.update': {
+    methods: ["PUT"]
+    pattern: '/users/:username'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/users/update_profile_validator').updateProfileValidator)>>
+      paramsTuple: [ParamValue]
+      params: { username: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/users/update_profile_validator').updateProfileValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
 }

@@ -84,11 +84,65 @@ const routes = {
     tokens: [{"old":"/posts/:id","type":0,"val":"posts","end":""},{"old":"/posts/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['posts.destroy']['types'],
   },
+  'comments.store': {
+    methods: ["POST"],
+    pattern: '/posts/:postId/comments',
+    tokens: [{"old":"/posts/:postId/comments","type":0,"val":"posts","end":""},{"old":"/posts/:postId/comments","type":1,"val":"postId","end":""},{"old":"/posts/:postId/comments","type":0,"val":"comments","end":""}],
+    types: placeholder as Registry['comments.store']['types'],
+  },
+  'comments.destroy': {
+    methods: ["DELETE"],
+    pattern: '/posts/:postId/comments/:id',
+    tokens: [{"old":"/posts/:postId/comments/:id","type":0,"val":"posts","end":""},{"old":"/posts/:postId/comments/:id","type":1,"val":"postId","end":""},{"old":"/posts/:postId/comments/:id","type":0,"val":"comments","end":""},{"old":"/posts/:postId/comments/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['comments.destroy']['types'],
+  },
+  'post_likes.store': {
+    methods: ["POST"],
+    pattern: '/posts/:postId/likes',
+    tokens: [{"old":"/posts/:postId/likes","type":0,"val":"posts","end":""},{"old":"/posts/:postId/likes","type":1,"val":"postId","end":""},{"old":"/posts/:postId/likes","type":0,"val":"likes","end":""}],
+    types: placeholder as Registry['post_likes.store']['types'],
+  },
+  'post_likes.destroy': {
+    methods: ["DELETE"],
+    pattern: '/posts/:postId/likes',
+    tokens: [{"old":"/posts/:postId/likes","type":0,"val":"posts","end":""},{"old":"/posts/:postId/likes","type":1,"val":"postId","end":""},{"old":"/posts/:postId/likes","type":0,"val":"likes","end":""}],
+    types: placeholder as Registry['post_likes.destroy']['types'],
+  },
+  'comment_likes.store': {
+    methods: ["POST"],
+    pattern: '/posts/:postId/comments/:commentId/likes',
+    tokens: [{"old":"/posts/:postId/comments/:commentId/likes","type":0,"val":"posts","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":1,"val":"postId","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":0,"val":"comments","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":1,"val":"commentId","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":0,"val":"likes","end":""}],
+    types: placeholder as Registry['comment_likes.store']['types'],
+  },
+  'comment_likes.destroy': {
+    methods: ["DELETE"],
+    pattern: '/posts/:postId/comments/:commentId/likes',
+    tokens: [{"old":"/posts/:postId/comments/:commentId/likes","type":0,"val":"posts","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":1,"val":"postId","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":0,"val":"comments","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":1,"val":"commentId","end":""},{"old":"/posts/:postId/comments/:commentId/likes","type":0,"val":"likes","end":""}],
+    types: placeholder as Registry['comment_likes.destroy']['types'],
+  },
   'tags.show': {
     methods: ["GET","HEAD"],
     pattern: '/tags/:slug',
     tokens: [{"old":"/tags/:slug","type":0,"val":"tags","end":""},{"old":"/tags/:slug","type":1,"val":"slug","end":""}],
     types: placeholder as Registry['tags.show']['types'],
+  },
+  'users.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/users/:username',
+    tokens: [{"old":"/users/:username","type":0,"val":"users","end":""},{"old":"/users/:username","type":1,"val":"username","end":""}],
+    types: placeholder as Registry['users.show']['types'],
+  },
+  'users.edit': {
+    methods: ["GET","HEAD"],
+    pattern: '/users/:username/edit',
+    tokens: [{"old":"/users/:username/edit","type":0,"val":"users","end":""},{"old":"/users/:username/edit","type":1,"val":"username","end":""},{"old":"/users/:username/edit","type":0,"val":"edit","end":""}],
+    types: placeholder as Registry['users.edit']['types'],
+  },
+  'users.update': {
+    methods: ["PUT"],
+    pattern: '/users/:username',
+    tokens: [{"old":"/users/:username","type":0,"val":"users","end":""},{"old":"/users/:username","type":1,"val":"username","end":""}],
+    types: placeholder as Registry['users.update']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 
