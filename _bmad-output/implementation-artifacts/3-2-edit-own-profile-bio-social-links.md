@@ -1,6 +1,6 @@
 # Story 3.2: Edit Own Profile (Bio & Social Links)
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -66,6 +66,14 @@ so that other users can learn about me and find me elsewhere online.
   - [x] `import { type PageProps, type SocialLink } from '~/types'` — reuse existing `SocialLink` interface
 
 - [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+
+### Review Findings
+
+- [x] [Review][Patch] Optional `social_links` payload can erase existing links when omitted [app/controllers/users_controller.ts:56]
+- [x] [Review][Patch] Optional `bio` payload can clear existing bio when field is omitted [app/controllers/users_controller.ts:50]
+- [x] [Review][Patch] Profile update flow is non-atomic and can leave partial writes on failure [app/controllers/users_controller.ts:47]
+- [x] [Review][Patch] Unauthorized profile edit path does not enforce redirect to `/` per AC #6 [app/controllers/users_controller.ts:16]
+- [x] [Review][Patch] Clearing bio in UI persists empty string instead of normalized `null` [app/controllers/users_controller.ts:51]
 
 ## Dev Notes
 
