@@ -21,6 +21,7 @@ declare module '@adonisjs/inertia/types' {
     'posts/PostEdit': ExtractProps<(typeof import('../../inertia/pages/posts/PostEdit.tsx'))['default']>
     'posts/PostIndex': ExtractProps<(typeof import('../../inertia/pages/posts/PostIndex.tsx'))['default']>
     'posts/PostShow': ExtractProps<(typeof import('../../inertia/pages/posts/PostShow.tsx'))['default']>
+    'users/UserEdit': ExtractProps<(typeof import('../../inertia/pages/users/UserEdit.tsx'))['default']>
     'users/UserProfile': ExtractProps<(typeof import('../../inertia/pages/users/UserProfile.tsx'))['default']>
   }
 }

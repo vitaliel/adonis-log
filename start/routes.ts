@@ -49,3 +49,11 @@ router.delete('/posts/:id', [PostsController, 'destroy']).as('posts.destroy').us
 router.get('/tags/:slug', [TagsController, 'show']).as('tags.show')
 
 router.get('/users/:username', [UsersController, 'show']).as('users.show')
+router
+  .get('/users/:username/edit', [UsersController, 'edit'])
+  .as('users.edit')
+  .use(middleware.auth())
+router
+  .put('/users/:username', [UsersController, 'update'])
+  .as('users.update')
+  .use(middleware.auth())
