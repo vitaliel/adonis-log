@@ -1,6 +1,6 @@
 # Story 4.1: Comments on Posts
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -104,6 +104,10 @@ so that I can engage in discussion around content.
   - [x] If not authenticated: show `<p>...</p>` prompt to log in instead of form
 
 - [x] Run checks: `npm run typecheck` (clean), `npm run lint` (clean), `node ace test` (all pass)
+
+### Review Findings
+
+- [x] [Review][Patch] Enforce post/comment route integrity in delete action [app/controllers/comments_controller.ts:15]
 
 ## Dev Notes
 

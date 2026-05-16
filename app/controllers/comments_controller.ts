@@ -14,6 +14,9 @@ export default class CommentsController {
 
   async destroy({ params, response, bouncer }: HttpContext) {
     const comment = await Comment.findOrFail(params.id)
+    if (comment.postId !== Number(params.postId)) {
+      return response.notFound()
+    }
     await bouncer.with(CommentPolicy).authorize('delete', comment)
     await comment.delete()
     return response.redirect(`/posts/${comment.postId}`)
