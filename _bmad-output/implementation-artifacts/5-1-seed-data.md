@@ -1,6 +1,6 @@
 # Story 5.1: Seed Data
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -20,34 +20,34 @@ So that I can immediately explore all features without manually creating data.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create `database/seeders/` directory and `main_seeder.ts` (AC: #1, #4)
-  - [ ] `node ace make:seeder main` — creates `database/seeders/main_seeder.ts`
-  - [ ] `run()` method calls sub-seeders in order: `UserSeeder → PostSeeder → TagSeeder → CommentSeeder → LikeSeeder`
-  - [ ] Import and instantiate each sub-seeder with `new XxxSeeder(this.client)`
-- [ ] Task 2: Create `user_seeder.ts` — 2 sample users (AC: #1, #3, #4)
-  - [ ] `node ace make:seeder user`
-  - [ ] Create 2 users via `User.firstOrCreate({ email }, { username, password, bio })`
-  - [ ] Password must be stored as bcrypt hash — use `hash.make('password')` or create user via `User.create()` which triggers the `beforeSave` hook automatically
-  - [ ] Add `UserSocialLink` rows for each user (e.g. `github`, `twitter` types)
-  - [ ] Use `UserSocialLink.firstOrCreate({ userId, type }, { url })` for idempotency
-- [ ] Task 3: Create `post_seeder.ts` — at least 5 posts (AC: #1, #2)
-  - [ ] `node ace make:seeder post`
-  - [ ] Create 5+ posts distributed across the 2 users via `Post.firstOrCreate({ title }, { userId, body })`
-  - [ ] Use `await post.related('tags').attach(...)` or `sync()` to attach pre-created tags
-- [ ] Task 4: Create `tag_seeder.ts` — a set of reusable tags (AC: #1, #2)
-  - [ ] `node ace make:seeder tag`
-  - [ ] Create 4–6 tags via `Tag.firstOrCreate({ slug }, { name })`
-  - [ ] Return created tags so `PostSeeder` can reference them
-- [ ] Task 5: Create `comment_seeder.ts` — at least 3 comments (AC: #1)
-  - [ ] `node ace make:seeder comment`
-  - [ ] Create 3+ comments on different posts via `Comment.firstOrCreate({ postId, userId, body }, {})`
-- [ ] Task 6: Create `like_seeder.ts` — likes on posts and comments (AC: #1)
-  - [ ] `node ace make:seeder like`
-  - [ ] Create `PostLike` rows via `PostLike.firstOrCreate({ postId, userId })`
-  - [ ] Create `CommentLike` rows via `CommentLike.firstOrCreate({ commentId, userId })`
-  - [ ] Respect the unique constraint on `(postId, userId)` and `(commentId, userId)`
-- [ ] Task 7: Verify end-to-end: `node ace db:seed` on a fresh DB, then re-run for idempotency (AC: #1, #4)
-- [ ] Task 8: Run quality gates — `npm run typecheck`, `npm run lint`
+- [x] Task 1: Create `database/seeders/` directory and `main_seeder.ts` (AC: #1, #4)
+  - [x] `node ace make:seeder main` — creates `database/seeders/main_seeder.ts`
+  - [x] `run()` method calls sub-seeders in order: `UserSeeder → PostSeeder → TagSeeder → CommentSeeder → LikeSeeder`
+  - [x] Import and instantiate each sub-seeder with `new XxxSeeder(this.client)`
+- [x] Task 2: Create `user_seeder.ts` — 2 sample users (AC: #1, #3, #4)
+  - [x] `node ace make:seeder user`
+  - [x] Create 2 users via `User.firstOrCreate({ email }, { username, password, bio })`
+  - [x] Password must be stored as bcrypt hash — use `hash.make('password')` or create user via `User.create()` which triggers the `beforeSave` hook automatically
+  - [x] Add `UserSocialLink` rows for each user (e.g. `github`, `twitter` types)
+  - [x] Use `UserSocialLink.firstOrCreate({ userId, type }, { url })` for idempotency
+- [x] Task 3: Create `post_seeder.ts` — at least 5 posts (AC: #1, #2)
+  - [x] `node ace make:seeder post`
+  - [x] Create 5+ posts distributed across the 2 users via `Post.firstOrCreate({ title }, { userId, body })`
+  - [x] Use `await post.related('tags').attach(...)` or `sync()` to attach pre-created tags
+- [x] Task 4: Create `tag_seeder.ts` — a set of reusable tags (AC: #1, #2)
+  - [x] `node ace make:seeder tag`
+  - [x] Create 4–6 tags via `Tag.firstOrCreate({ slug }, { name })`
+  - [x] Return created tags so `PostSeeder` can reference them
+- [x] Task 5: Create `comment_seeder.ts` — at least 3 comments (AC: #1)
+  - [x] `node ace make:seeder comment`
+  - [x] Create 3+ comments on different posts via `Comment.firstOrCreate({ postId, userId, body }, {})`
+- [x] Task 6: Create `like_seeder.ts` — likes on posts and comments (AC: #1)
+  - [x] `node ace make:seeder like`
+  - [x] Create `PostLike` rows via `PostLike.firstOrCreate({ postId, userId })`
+  - [x] Create `CommentLike` rows via `CommentLike.firstOrCreate({ commentId, userId })`
+  - [x] Respect the unique constraint on `(postId, userId)` and `(commentId, userId)`
+- [x] Task 7: Verify end-to-end: `node ace db:seed` on a fresh DB, then re-run for idempotency (AC: #1, #4)
+- [x] Task 8: Run quality gates — `npm run typecheck`, `npm run lint`
 
 ## Dev Notes
 
@@ -152,6 +152,27 @@ claude-sonnet-4.6
 
 ### Debug Log References
 
+- AdonisJS `db:seed` discovers and runs ALL seeder files in `database/seeders/` independently. Sub-seeders (`comment_seeder`, `like_seeder`) initially failed when run standalone (before their deps existed). Fixed by switching from `findByOrFail` to `findBy` + early-return guard — each sub-seeder now gracefully no-ops when called out-of-order, while MainSeeder orchestrates them correctly.
+- `database/schema.ts` was regenerated by `migration:fresh` with slightly different formatting — fixed with `eslint --fix`.
+
 ### Completion Notes List
 
+- Created `database/seeders/` directory with 6 seeder files: `main_seeder.ts`, `user_seeder.ts`, `tag_seeder.ts`, `post_seeder.ts`, `comment_seeder.ts`, `like_seeder.ts`
+- MainSeeder orchestrates sub-seeders in dependency order: UserSeeder → TagSeeder → PostSeeder → CommentSeeder → LikeSeeder
+- Seeded: 2 users (alice, bob) with 4 social links, 6 tags, 6 posts (tagged), 5 comments, 5 post likes, 4 comment likes
+- All records use `firstOrCreate` / `sync(…, false)` for full idempotency — verified by running `db:seed` twice on same DB with identical counts
+- `npm run typecheck` ✅  `npm run lint` ✅
+
 ### File List
+
+- `database/seeders/main_seeder.ts` (new)
+- `database/seeders/user_seeder.ts` (new)
+- `database/seeders/tag_seeder.ts` (new)
+- `database/seeders/post_seeder.ts` (new)
+- `database/seeders/comment_seeder.ts` (new)
+- `database/seeders/like_seeder.ts` (new)
+- `database/schema.ts` (modified — reformatted by `migration:fresh`, lint-fixed)
+
+## Change Log
+
+- 2026-05-16: Created `database/seeders/` with 6 seeder files (MainSeeder + 5 sub-seeders). Implements idempotent seed data: 2 users, 6 tags, 6 posts, 5 comments, post/comment likes. All quality gates pass.
