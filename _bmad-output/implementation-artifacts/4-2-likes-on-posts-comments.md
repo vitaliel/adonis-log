@@ -1,6 +1,6 @@
 # Story 4.2: Likes on Posts & Comments
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -62,6 +62,11 @@ so that I can express appreciation for content I find valuable.
   - [x] Add `<LikeButton>` to each comment card
   - [x] Accept new props: `user_has_liked`, updated `comments` shape
 - [x] Task 10: Run quality gates — `npm run typecheck`, `npm run lint`, `node ace test`
+
+### Review Findings
+
+- [x] [Review][Patch] Like models are missing a usable primary key for delete-by-instance, which can break `like?.delete()` on composite-key tables [app/models/post_like.ts:7]
+- [x] [Review][Patch] Nested comment-like routes do not verify that `commentId` belongs to `postId`, allowing cross-post like/unlike via forged URLs [app/controllers/comment_likes_controller.ts:5]
 
 ## Dev Notes
 
