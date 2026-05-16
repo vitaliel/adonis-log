@@ -12,11 +12,26 @@ export default class CommentSeeder extends BaseSeeder {
     const bob = await User.findBy('email', 'bob@example.com')
     if (!alice || !bob) return
 
-    const post1 = await Post.findBy('title', 'Getting Started with AdonisJS and TypeScript')
-    const post2 = await Post.findBy('title', 'Why I Switched from REST to Inertia.js')
-    const post3 = await Post.findBy('title', 'Deep Dive into AdonisJS Lucid ORM')
-    const post5 = await Post.findBy('title', 'Optimising Database Queries in Node.js Applications')
-    if (!post1 || !post2 || !post3 || !post5) return
+    const post1 = await Post.query()
+      .where('title', 'Getting Started with AdonisJS and TypeScript')
+      .where('userId', alice.id)
+      .first()
+    const post2 = await Post.query()
+      .where('title', 'Why I Switched from REST to Inertia.js')
+      .where('userId', alice.id)
+      .first()
+    const post3 = await Post.query()
+      .where('title', 'Deep Dive into AdonisJS Lucid ORM')
+      .where('userId', bob.id)
+      .first()
+    const post5 = await Post.query()
+      .where('title', 'Optimising Database Queries in Node.js Applications')
+      .where('userId', bob.id)
+      .first()
+    if (!post1 || !post2 || !post3 || !post5) {
+      console.info('[CommentSeeder] Skipping: required posts were not found')
+      return
+    }
 
     await Comment.firstOrCreate(
       {

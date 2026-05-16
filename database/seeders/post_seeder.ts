@@ -5,15 +5,19 @@ import Tag from '#models/tag'
 
 export default class PostSeeder extends BaseSeeder {
   async run() {
-    const alice = await User.findByOrFail('email', 'alice@example.com')
-    const bob = await User.findByOrFail('email', 'bob@example.com')
+    const alice = await User.findBy('email', 'alice@example.com')
+    const bob = await User.findBy('email', 'bob@example.com')
 
-    const tsTag = await Tag.findByOrFail('slug', 'typescript')
-    const jsTag = await Tag.findByOrFail('slug', 'javascript')
-    const webTag = await Tag.findByOrFail('slug', 'web-development')
-    const tutorialTag = await Tag.findByOrFail('slug', 'tutorial')
-    const ossTag = await Tag.findByOrFail('slug', 'open-source')
-    const backendTag = await Tag.findByOrFail('slug', 'backend')
+    const tsTag = await Tag.findBy('slug', 'typescript')
+    const jsTag = await Tag.findBy('slug', 'javascript')
+    const webTag = await Tag.findBy('slug', 'web-development')
+    const tutorialTag = await Tag.findBy('slug', 'tutorial')
+    const ossTag = await Tag.findBy('slug', 'open-source')
+    const backendTag = await Tag.findBy('slug', 'backend')
+    if (!alice || !bob || !tsTag || !jsTag || !webTag || !tutorialTag || !ossTag || !backendTag) {
+      console.info('[PostSeeder] Skipping: required users/tags were not found')
+      return
+    }
 
     const post1 = await Post.firstOrCreate(
       { title: 'Getting Started with AdonisJS and TypeScript' },

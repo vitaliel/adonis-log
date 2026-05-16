@@ -1,6 +1,6 @@
 # Story 5.1: Seed Data
 
-Status: review
+Status: done
 
 ## Story
 
@@ -48,6 +48,16 @@ So that I can immediately explore all features without manually creating data.
   - [x] Respect the unique constraint on `(postId, userId)` and `(commentId, userId)`
 - [x] Task 7: Verify end-to-end: `node ace db:seed` on a fresh DB, then re-run for idempotency (AC: #1, #4)
 - [x] Task 8: Run quality gates — `npm run typecheck`, `npm run lint`
+
+### Review Findings
+
+- [x] [Review][Patch] Remove out-of-scope generated route/registry artifacts from this story diff [`.adonisjs/client/registry/index.ts`]
+- [x] [Review][Patch] Remove out-of-scope sprint tracking change from this story diff [`_bmad-output/implementation-artifacts/sprint-status.yaml:38`]
+- [x] [Review][Patch] Revert unintended nullability contract change for `UserSocialLinkSchema.updatedAt` [`database/schema.ts:100`]
+- [x] [Review][Patch] Make `PostSeeder` handle missing dependency records consistently instead of hard-failing with `findByOrFail` [`database/seeders/post_seeder.ts:8`]
+- [x] [Review][Patch] Avoid silent no-op in `CommentSeeder` when dependencies are missing; surface or handle explicitly [`database/seeders/comment_seeder.ts:19`]
+- [x] [Review][Patch] Avoid silent no-op in `LikeSeeder` when dependencies are missing; surface or handle explicitly [`database/seeders/like_seeder.ts:21`]
+- [x] [Review][Patch] Avoid title-based post lookup ambiguity in comment/like seeders when duplicate titles exist [`database/seeders/comment_seeder.ts:15`]
 
 ## Dev Notes
 
