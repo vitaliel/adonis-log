@@ -47,3 +47,16 @@ export interface PostSummary {
 export interface PostDetail extends PostSummary {
   body: string
 }
+
+export interface SocialLink {
+  id: number
+  type: string
+  url: string
+}
+
+export interface UserProfile {
+  id: number
+  username: string
+  bio: string | null
+  socialLinks: SocialLink[]
+}
