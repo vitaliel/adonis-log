@@ -1,6 +1,6 @@
 # Story 5.3: README & Architecture Documentation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -10,7 +10,7 @@ So that I can get the project running locally in under 15 minutes and understand
 
 ## Acceptance Criteria
 
-1. **Given** I find the repository on GitHub **When** I read `README.md` **Then** I find: project description, prerequisites (Node.js version ≥24.0.0), step-by-step local setup commands (`git clone`, `npm install`, `cp .env.example .env`, `node ace key:generate`, `node ace migration:run`, `node ace db:seed`, `node ace serve --hmr`), and a note that the app is available at `http://localhost:3333`
+1. **Given** I find the repository on GitHub **When** I read `README.md` **Then** I find: project description, prerequisites (Node.js version ≥24.0.0), step-by-step local setup commands (`git clone`, `npm install`, `cp .env.example .env`, `node ace generate:key`, `node ace migration:run`, `node ace db:seed`, `node ace serve --hmr`), and a note that the app is available at `http://localhost:3333`
 
 2. **Given** I follow the README setup steps exactly **When** I run `node ace serve --hmr` **Then** the application starts without errors and I can browse the post list in a browser
 
@@ -21,7 +21,7 @@ So that I can get the project running locally in under 15 minutes and understand
 - [x] Task 1: Create `README.md` at project root (AC: #1, #2)
   - [x] Project name and one-sentence description
   - [x] Prerequisites section: Node.js ≥24.0.0, npm (no other global tools needed)
-  - [x] Setup section with exact commands in order (clone → install → .env → key:generate → migration:run → db:seed → serve --hmr)
+  - [x] Setup section with exact commands in order (clone → install → .env → generate:key → migration:run → db:seed → serve --hmr)
   - [x] App URL: `http://localhost:3333`
   - [x] Brief note on test credentials from seeder (any seeded user email/password)
 
@@ -38,11 +38,16 @@ So that I can get the project running locally in under 15 minutes and understand
   - [x] Confirm `node ace generate:key` is the right command (not `key:generate` — corrected from story notes)
   - [x] Confirm migration and seed commands work on fresh SQLite database
 
+### Review Findings
+
+- [x] [Review][Decision] Resolve canonical APP_KEY command reference — kept `node ace generate:key` as canonical and aligned story references accordingly.
+- [x] [Review][Patch] Add Git to prerequisites because setup requires `git clone` [README.md:7]
+
 ## Dev Notes
 
 - **Only deliverable is `README.md` at the project root** — no code changes, no new files elsewhere
 - `.env.example` already exists with all required keys (`APP_KEY`, `DB_CONNECTION=sqlite`, etc.)
-- `APP_KEY` must be generated via `node ace key:generate` (writes to `.env`) — not manually copied
+- `APP_KEY` must be generated via `node ace generate:key` (writes to `.env`) — not manually copied
 - The app uses SQLite so no database server setup is needed — pure zero-config local dev
 - SSR is disabled; the app runs client-side React via Inertia — no SSR setup steps needed
 - Dev command is `node ace serve --hmr` (not `npm run dev` — though that alias may exist; use the canonical ace command)
@@ -89,7 +94,7 @@ git clone <repo-url> adonis_react_app
 cd adonis_react_app
 npm install
 cp .env.example .env
-node ace key:generate          # writes APP_KEY into .env
+node ace generate:key          # writes APP_KEY into .env
 node ace migration:run
 node ace db:seed
 node ace serve --hmr           # http://localhost:3333

@@ -4,6 +4,7 @@ A full-stack blogging platform built with AdonisJS 6, demonstrating session auth
 
 ## Prerequisites
 
+- **Git** (for cloning the repository)
 - **Node.js** ≥ 24.0.0 (ESM-native runtime)
 - **npm** (bundled with Node.js — no other global tools required)
 

@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: "2026-05-15"
-last_updated: "2026-05-17"  # updated by dev-story for 5-3-readme-architecture-documentation
+last_updated: "2026-05-17"  # updated by code-review for 5-3-readme-architecture-documentation
 project: AdonisLog
 project_key: NOKEY
 tracking_system: file-system
@@ -67,5 +67,5 @@ development_status:
   epic-5: in-progress
   5-1-seed-data: done
   5-2-functional-test-suite: done
-  5-3-readme-architecture-documentation: review
+  5-3-readme-architecture-documentation: done
   epic-5-retrospective: optional
