@@ -1,6 +1,6 @@
 # Story 5.3: README & Architecture Documentation
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -18,25 +18,25 @@ So that I can get the project running locally in under 15 minutes and understand
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create `README.md` at project root (AC: #1, #2)
-  - [ ] Project name and one-sentence description
-  - [ ] Prerequisites section: Node.js ≥24.0.0, npm (no other global tools needed)
-  - [ ] Setup section with exact commands in order (clone → install → .env → key:generate → migration:run → db:seed → serve --hmr)
-  - [ ] App URL: `http://localhost:3333`
-  - [ ] Brief note on test credentials from seeder (any seeded user email/password)
+- [x] Task 1: Create `README.md` at project root (AC: #1, #2)
+  - [x] Project name and one-sentence description
+  - [x] Prerequisites section: Node.js ≥24.0.0, npm (no other global tools needed)
+  - [x] Setup section with exact commands in order (clone → install → .env → key:generate → migration:run → db:seed → serve --hmr)
+  - [x] App URL: `http://localhost:3333`
+  - [x] Brief note on test credentials from seeder (any seeded user email/password)
 
-- [ ] Task 2: Add Architectural Overview section to `README.md` (AC: #3)
-  - [ ] AdonisJS capabilities demonstrated (session auth, Lucid ORM, Inertia.js, Bouncer Policies, VineJS)
-  - [ ] Key architectural decisions subsection:
+- [x] Task 2: Add Architectural Overview section to `README.md` (AC: #3)
+  - [x] AdonisJS capabilities demonstrated (session auth, Lucid ORM, Inertia.js, Bouncer Policies, VineJS)
+  - [x] Key architectural decisions subsection:
     - No polymorphic likes (two separate tables: `post_likes`, `comment_likes`)
     - Inertia shared data shape: `{ auth: { user }, flash: { success?, error? }, errors: Record<string, string> }`
     - Bouncer Policies in `app/policies/` for all ownership authorization
-  - [ ] Brief project structure overview matching actual source tree
+  - [x] Brief project structure overview matching actual source tree
 
-- [ ] Task 3: Verify accuracy — dry-run all setup commands mentally against actual project state (AC: #2)
-  - [ ] Confirm `.env.example` exists and contains all required keys
-  - [ ] Confirm `node ace key:generate` is the right command (not manual copy)
-  - [ ] Confirm migration and seed commands work on fresh SQLite database
+- [x] Task 3: Verify accuracy — dry-run all setup commands mentally against actual project state (AC: #2)
+  - [x] Confirm `.env.example` exists and contains all required keys
+  - [x] Confirm `node ace generate:key` is the right command (not `key:generate` — corrected from story notes)
+  - [x] Confirm migration and seed commands work on fresh SQLite database
 
 ## Dev Notes
 
@@ -123,6 +123,20 @@ Claude Sonnet 4.6
 
 ### Debug Log References
 
+- Discovered that the correct Ace command is `generate:key` not `key:generate` (as written in Dev Notes). Verified via `node ace list`. README uses the correct command.
+
 ### Completion Notes List
 
+- Created `README.md` at project root with project description, prerequisites (Node.js ≥24.0.0), exact setup command sequence, app URL, and seeded test credentials (alice@example.com / password123).
+- Added Architecture Overview section covering all 5 AdonisJS capabilities (session auth, Lucid ORM, Inertia.js, Bouncer Policies, VineJS) plus key architectural decisions table and project structure tree.
+- Verified `.env.example` exists with all required keys (APP_KEY, DB_CONNECTION, SESSION_DRIVER, PORT, HOST, APP_URL, LOG_LEVEL, TZ, NODE_ENV).
+- Verified all 8 migration files exist in `database/migrations/`.
+- Corrected command from `key:generate` → `generate:key` based on actual `node ace list` output.
+
 ### File List
+
+- `README.md` (new)
+
+## Change Log
+
+- 2026-05-17: Created `README.md` with setup instructions and architecture documentation. Corrected `key:generate` → `generate:key` (actual Ace command name verified from project).
