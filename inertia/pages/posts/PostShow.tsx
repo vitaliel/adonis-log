@@ -88,7 +88,13 @@ export default function PostShow({
             <div className="card-body">
               <p className="mb-1">{comment.body}</p>
               <p className="text-muted small mb-0">
-                {comment.author_username} · {comment.created_at}
+                <Link
+                  href={`/users/${encodeURIComponent(comment.author_username)}`}
+                  aria-label={`View ${comment.author_username}'s profile`}
+                >
+                  {comment.author_username}
+                </Link>{' '}
+                · {comment.created_at}
               </p>
               <div className="mt-2 d-flex align-items-center gap-2">
                 <LikeButton
