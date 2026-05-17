@@ -40,7 +40,9 @@ jobs:
         run: npm run typecheck
 
       - name: Setup
-        run: cp .env.example .env
+        run: |
+          cp .env.example .env
+          node ace generate:key
 
       - name: Test
         run: npm run test
