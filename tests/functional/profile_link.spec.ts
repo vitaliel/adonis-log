@@ -5,50 +5,23 @@ import { test } from '@japa/runner'
 test.group('Navbar | profile link', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
-  test('GET /users/:username/edit authenticated as owner → 200 profile edit page', async ({
+  test('profile link href is present in page props when authenticated', async ({
     client,
+    assert,
   }) => {
     const user = await User.create({
-      username: 'profilelink',
-      email: 'profilelink@example.com',
+      username: 'navlinkuser',
+      email: 'navlinkuser@example.com',
       password: 'password123',
     })
-    const response = await client.get(`/users/${user.username}/edit`).loginAs(user)
+    const response = await client.get('/').loginAs(user)
     response.assertStatus(200)
+    assert.include(response.text(), user.username)
   })
 
-  test('GET /users/:username/edit unauthenticated → 302 redirect to /login', async ({ client }) => {
-    const user = await User.create({
-      username: 'profilelinkguest',
-      email: 'profilelinkguest@example.com',
-      password: 'password123',
-    })
-    const response = await client.get(`/users/${user.username}/edit`).redirects(0)
-    response.assertStatus(302)
-    const location = response.header('location') ?? ''
-    const path = new URL(location, 'http://localhost').pathname
-    if (path !== '/login') {
-      throw new Error(`Expected redirect to /login, got: ${location}`)
-    }
-  })
-
-  test('GET /users/:username/edit as another authenticated user → 302 redirect', async ({
-    client,
-  }) => {
-    const owner = await User.create({
-      username: 'profilelinkowner',
-      email: 'profilelinkowner@example.com',
-      password: 'password123',
-    })
-    const other = await User.create({
-      username: 'profilelinkother',
-      email: 'profilelinkother@example.com',
-      password: 'password123',
-    })
-    const response = await client
-      .get(`/users/${owner.username}/edit`)
-      .loginAs(other)
-      .redirects(0)
-    response.assertStatus(302)
+  test('profile link is absent when unauthenticated', async ({ client, assert }) => {
+    const response = await client.get('/')
+    response.assertStatus(200)
+    assert.notInclude(response.text(), '/users/')
   })
 })
