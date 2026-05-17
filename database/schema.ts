@@ -105,15 +105,7 @@ export class UserSocialLinkSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = [
-    'bio',
-    'createdAt',
-    'email',
-    'id',
-    'password',
-    'updatedAt',
-    'username',
-  ] as const
+  static $columns = ['bio', 'createdAt', 'email', 'id', 'password', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
   @column()
   declare bio: string | null
