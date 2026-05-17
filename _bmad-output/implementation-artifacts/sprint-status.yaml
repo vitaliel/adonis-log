@@ -66,6 +66,6 @@ development_status:
 
   epic-5: in-progress
   5-1-seed-data: done
-  5-2-functional-test-suite: ready-for-dev
+  5-2-functional-test-suite: review
   5-3-readme-architecture-documentation: backlog
   epic-5-retrospective: optional

@@ -25,6 +25,7 @@ test.group('Story 2.1 | Public posts read', (group) => {
     await firstPost.related('tags').attach([tag.id])
 
     const posts = await Post.query()
+      .where('userId', user.id)
       .preload('author')
       .preload('tags')
       .orderBy('created_at', 'desc')
