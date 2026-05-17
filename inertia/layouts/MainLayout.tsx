@@ -29,6 +29,13 @@ export default function MainLayout({ children }: { children: ReactNode }) {
                 Posts
               </a>
             </li>
+            {auth?.user && (
+              <li className="nav-item">
+                <Link className="nav-link" href={`/users/${auth.user.username}/edit`}>
+                  Profile
+                </Link>
+              </li>
+            )}
             {auth?.user ? (
               <li className="nav-item">
                 <Link
