@@ -10,7 +10,7 @@ export default function PostCreate(_props: PostCreateProps) {
     tags: '',
   })
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     const uniqueTags = [...new Set(dataToTags(form.data.tags))]
 

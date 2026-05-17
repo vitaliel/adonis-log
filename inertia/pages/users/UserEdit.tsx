@@ -23,7 +23,7 @@ export default function UserEdit({ user }: UserEditProps) {
     social_links: user.socialLinks.map((l) => ({ type: l.type, url: l.url })),
   })
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     form.put(`/users/${user.username}`)
   }

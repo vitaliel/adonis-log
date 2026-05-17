@@ -7,7 +7,7 @@ export default function Login({ errors }: PageProps) {
     password: '',
   })
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     post('/login')
   }

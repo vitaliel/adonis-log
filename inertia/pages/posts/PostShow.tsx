@@ -31,7 +31,7 @@ export default function PostShow({
     deleteCommentForm.delete(`/posts/${postId}/comments/${commentId}`)
   }
 
-  function handleCommentSubmit(e: React.FormEvent) {
+  function handleCommentSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     commentForm.post(`/posts/${post.id}/comments`, {
       onSuccess: () => commentForm.reset(),

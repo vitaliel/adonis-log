@@ -12,7 +12,7 @@ export default function PostEdit({ post }: PostEditProps) {
     tags: post.tags,
   })
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     const tagList = form.data.tags
       .split(',')
