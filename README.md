@@ -27,10 +27,10 @@ The application will be available at **http://localhost:3333**.
 
 The seeder creates two demo users — either can be used to log in immediately:
 
-| Email | Password |
-|---|---|
+| Email             | Password    |
+| ----------------- | ----------- |
 | alice@example.com | password123 |
-| bob@example.com | password123 |
+| bob@example.com   | password123 |
 
 ### Running Tests
 
@@ -42,15 +42,15 @@ node ace test
 
 ### AdonisJS Capabilities Demonstrated
 
-| Capability | Details |
-|---|---|
-| **Session Auth** | `@adonisjs/auth ^10` — cookie-based sessions with bcrypt password hashing |
-| **Lucid ORM** | `^22` — migrations, models, relationships, eager loading |
-| **Inertia.js** | Server-driven React SPA — no REST API; controllers call `inertia.render()` |
+| Capability           | Details                                                                            |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| **Session Auth**     | `@adonisjs/auth ^10` — cookie-based sessions with bcrypt password hashing          |
+| **Lucid ORM**        | `^22` — migrations, models, relationships, eager loading                           |
+| **Inertia.js**       | Server-driven React SPA — no REST API; controllers call `inertia.render()`         |
 | **Bouncer Policies** | `app/policies/` — `PostPolicy`, `CommentPolicy`, `UserPolicy` for ownership checks |
-| **VineJS** | `@vinejs/vine ^4.3.1` — server-side schema validation in `app/validators/` |
-| **Frontend** | React ^19, Bootstrap CSS, Vite HMR |
-| **Database** | SQLite via `better-sqlite3` — zero-config, no database server needed |
+| **VineJS**           | `@vinejs/vine ^4.3.1` — server-side schema validation in `app/validators/`         |
+| **Frontend**         | React ^19, Bootstrap CSS, Vite HMR                                                 |
+| **Database**         | SQLite via `better-sqlite3` — zero-config, no database server needed               |
 
 ### Key Architectural Decisions
 

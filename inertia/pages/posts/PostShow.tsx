@@ -135,11 +135,7 @@ export default function PostShow({
                   <div className="invalid-feedback">{commentForm.errors.body}</div>
                 )}
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={commentForm.processing}
-              >
+              <button type="submit" className="btn btn-primary" disabled={commentForm.processing}>
                 {commentForm.processing ? 'Posting…' : 'Post Comment'}
               </button>
             </form>
