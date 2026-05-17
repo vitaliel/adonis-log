@@ -3,12 +3,54 @@ import Post from '#models/post'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
+function extractInertiaPagePayload(html: string) {
+  const pageMatch = html.match(/data-page="([^"]+)"/)
+  if (!pageMatch) {
+    throw new Error('Expected Inertia data-page payload in response HTML')
+  }
+
+  const decoded = pageMatch[1]
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#x27;', "'")
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&amp;', '&')
+
+  return JSON.parse(decoded)
+}
+
 test.group('Posts | public read', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('GET /posts → 200 with post list', async ({ client }) => {
     const response = await client.get('/posts')
     response.assertStatus(200)
+  })
+
+  test('GET /posts guest → does not show New Post link', async ({ client, assert }) => {
+    const response = await client.get('/posts')
+    response.assertStatus(200)
+    const page = extractInertiaPagePayload(response.text())
+    assert.isNull(page.props.auth.user)
+  })
+
+  test('GET /posts authenticated empty list → shows empty state and New Post link', async ({
+    client,
+    assert,
+  }) => {
+    const user = await User.create({
+      username: 'emptylistuser',
+      email: 'emptylistuser@example.com',
+      password: 'password123',
+    })
+    await Post.query().delete()
+
+    const response = await client.get('/posts').loginAs(user)
+    response.assertStatus(200)
+    const page = extractInertiaPagePayload(response.text())
+    assert.equal(page.component, 'posts/PostIndex')
+    assert.equal(page.props.auth.user.id, user.id)
+    assert.equal(page.props.posts.length, 0)
   })
 
   test('GET /posts/:id → 200 with post detail', async ({ client }) => {

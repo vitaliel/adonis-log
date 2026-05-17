@@ -9,10 +9,17 @@ interface PostIndexProps extends PageProps {
   active_tag?: string
 }
 
-export default function PostIndex({ posts, meta, active_tag }: PostIndexProps) {
+export default function PostIndex({ posts, meta, active_tag, auth }: PostIndexProps) {
   return (
     <div>
-      <h1 className="mb-4">{active_tag ? `Posts tagged: ${active_tag}` : 'All Posts'}</h1>
+      <div className="mb-4 d-flex justify-content-between align-items-center">
+        <h1 className="mb-0">{active_tag ? `Posts tagged: ${active_tag}` : 'All Posts'}</h1>
+        {auth?.user && (
+          <Link href="/posts/create" className="btn btn-primary">
+            New Post
+          </Link>
+        )}
+      </div>
 
       {posts.length === 0 && <p className="text-muted">No posts yet.</p>}
 
