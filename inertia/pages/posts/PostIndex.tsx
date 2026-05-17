@@ -24,8 +24,8 @@ export default function PostIndex({ posts, meta, active_tag }: PostIndexProps) {
             </h5>
 
             <p className="card-text text-muted small mb-2">
-              By <Link href={`/users/${encodeURIComponent(post.author_username)}`}>{post.author_username}</Link>{' '}
-              | {post.created_at} | Like count: {post.like_count}
+              By <Link href={`/users/${encodeURIComponent(post.author_username)}`}>{post.author_username}</Link> |{' '}
+              {post.created_at} | Like count: {post.like_count}
             </p>
 
             <div>
