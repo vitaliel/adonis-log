@@ -99,6 +99,10 @@ test.group('Posts | edit / delete', (group) => {
       .redirects(0)
     // AdonisJS redirects back for HTML form submissions on authorization failure
     response.assertStatus(302)
+    await post.refresh()
+    if (post.title !== 'Original' || post.body !== 'Body') {
+      throw new Error('Unauthorized update was applied')
+    }
   })
 
   test('DELETE /posts/:id as owner → 302 redirect', async ({ client }) => {

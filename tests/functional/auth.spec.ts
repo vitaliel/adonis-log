@@ -24,6 +24,11 @@ test.group('Auth | registration', (group) => {
     if (status !== 302 && status !== 422) {
       throw new Error(`Expected 302 or 422 but got ${status}`)
     }
+
+    const users = await User.query().where('email', 'dup@example.com')
+    if (users.length !== 1) {
+      throw new Error(`Expected exactly 1 user with duplicate email, got ${users.length}`)
+    }
   })
 })
 
@@ -53,7 +58,8 @@ test.group('Auth | login / logout', (group) => {
       .redirects(0)
     response.assertStatus(302)
     const location = response.header('location') ?? ''
-    if (!location.includes('/login')) {
+    const path = new URL(location, 'http://localhost').pathname
+    if (path !== '/login') {
       throw new Error(`Expected redirect to /login, got: ${location}`)
     }
   })
@@ -76,7 +82,8 @@ test.group('Auth | protected route redirect', (group) => {
     const response = await client.get('/posts/create').redirects(0)
     response.assertStatus(302)
     const location = response.header('location') ?? ''
-    if (!location.includes('/login')) {
+    const path = new URL(location, 'http://localhost').pathname
+    if (path !== '/login') {
       throw new Error(`Expected redirect to /login, got: ${location}`)
     }
   })

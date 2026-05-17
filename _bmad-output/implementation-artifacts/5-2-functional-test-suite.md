@@ -1,6 +1,6 @@
 # Story 5.2: Functional Test Suite
 
-Status: review
+Status: done
 
 ## Story
 
@@ -14,9 +14,9 @@ So that I can see how Japa HTTP tests work for real-world AdonisJS features.
 
 2. **Given** `tests/functional/auth.spec.ts` exists **When** I read it **Then** it covers: registration with valid data, registration with duplicate email, login with valid credentials, login with invalid credentials, logout, and redirect to login for protected routes
 
-3. **Given** `tests/functional/posts.spec.ts` exists **When** I read it **Then** it covers: public post list, post detail view, create post (authenticated), create post (unauthenticated → redirect), edit own post, attempt to edit another user's post (→ 403), delete own post
+3. **Given** `tests/functional/posts.spec.ts` exists **When** I read it **Then** it covers: public post list, post detail view, create post (authenticated), create post (unauthenticated → redirect), edit own post, attempt to edit another user's post (→ redirect back for HTML form authorization failure), delete own post
 
-4. **Given** `tests/functional/comments.spec.ts` exists **When** I read it **Then** it covers: comment on a post (authenticated), empty comment validation, delete own comment, attempt to delete another user's comment (→ 403)
+4. **Given** `tests/functional/comments.spec.ts` exists **When** I read it **Then** it covers: comment on a post (authenticated), empty comment validation, delete own comment, attempt to delete another user's comment (→ redirect back for HTML form authorization failure)
 
 5. **Given** `tests/functional/likes.spec.ts` exists **When** I read it **Then** it covers: like a post, unlike a post (toggle), like a comment, unauthenticated like attempt (→ redirect)
 
@@ -57,11 +57,26 @@ So that I can see how Japa HTTP tests work for real-world AdonisJS features.
 - [x] Task 5: Create `tests/functional/users.spec.ts` (AC: #6)
   - [x] Test: GET `/users/:username` → 200 public profile visible
   - [x] Test: GET `/users/:username/edit` as that user → 200 edit form visible
-  - [x] Test: PUT `/users/:username` as that user with valid bio → 302 redirect, bio updated
+  - [x] Test: PUT `/users/:username` as that user with valid bio and social links → 302 redirect, profile updated
+  - [x] Test: GET `/users/:username/edit` as another authenticated user → 302 redirect
   - [x] Test: GET `/users/:username/edit` unauthenticated → 302 redirect to `/login`
 
 - [x] Task 6: Run full test suite `node ace test` — all new tests pass (47/48; 1 pre-existing failure in unrelated test)
 - [x] Task 7: Run quality gates — `npm run typecheck`, `npm run lint`
+
+### Review Findings
+
+- [x] [Review][Patch] Normalize AC #3/#4 wording to match framework redirect-back `302` behavior for HTML form authorization failures (decision resolved) [_bmad-output/implementation-artifacts/5-2-functional-test-suite.md:17]
+
+- [x] [Review][Patch] Complete AC #6 coverage in user profile tests [tests/functional/users.spec.ts:32]
+- [x] [Review][Patch] Keep bootstrap API-client plugin wiring (required for typed `client` test context) [tests/bootstrap.ts:1]
+- [x] [Review][Patch] Revert forbidden file modifications from this story scope [tests/functional/posts_public_read.spec.ts:1]
+- [x] [Review][Patch] Strengthen unauthorized write-path tests to verify no mutation side effects [tests/functional/posts.spec.ts:83]
+- [x] [Review][Patch] Strengthen unauthorized write-path tests to verify no mutation side effects [tests/functional/comments.spec.ts:63]
+- [x] [Review][Patch] Tighten auth/redirect assertions and duplicate-registration safety checks [tests/functional/auth.spec.ts:16]
+- [x] [Review][Patch] Make CSRF test-env toggle resilient to `testing` environment naming [config/shield.ts:34]
+
+- [x] [Review][Defer] Full suite still has one unrelated pre-existing failure [tests/functional/posts_public_read.spec.ts:1] — deferred, pre-existing
 
 ## Dev Notes
 

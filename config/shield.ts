@@ -31,7 +31,7 @@ const shieldConfig = defineConfig({
      * Enable CSRF token verification for state-changing requests.
      * Disabled in test environment so Japa HTTP tests can run without managing tokens.
      */
-    enabled: process.env.NODE_ENV !== 'test',
+    enabled: !['test', 'testing'].includes((process.env.NODE_ENV ?? '').toLowerCase()),
 
     /**
      * Route patterns to exclude from CSRF checks.

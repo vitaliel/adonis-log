@@ -85,5 +85,9 @@ test.group('Comments | destroy', (group) => {
       .redirects(0)
     // AdonisJS redirects back for HTML form submissions on authorization failure
     response.assertStatus(302)
+    await comment.refresh()
+    if (comment.body !== 'Owner comment') {
+      throw new Error('Unauthorized comment delete/update side effect detected')
+    }
   })
 })
